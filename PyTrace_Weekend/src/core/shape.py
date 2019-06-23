@@ -11,11 +11,11 @@ class sphere(hitable):
 		rec = hit_record()
 		oc = r.origin() - self.center
 		a = (r.direction()).dot(r.direction())
-		b = 2.0 * oc.dot(r.direction())
+		b = oc.dot(r.direction())
 		c = oc.dot(oc) - self.radius * self.radius
-		discriminant = b * b - 4 * a * c
+		discriminant = b * b - a * c
 		if (discriminant > 0 ): 
-			temp = (-b - math.sqrt(b * b - a * c))
+			temp = (-b - math.sqrt(b * b - a * c))/a
 			if ((temp < t_max and temp > t_min)):
 				#print('hit this')
 				rec.t = temp

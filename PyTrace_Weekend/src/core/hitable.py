@@ -15,7 +15,13 @@ class hitable(ABC):
 		self.rec = rec
 	def hit(self):
 		pass
+'''
+substitute function for hitable_list 
+since list in python can already deal with abritrary classes and we dont need to specify a
+special class to store lists and the hit functionality.
 
+Here we just iterate through a list of hitable objects and record the closest hit for any ray
+'''
 def iterate_hit_list(r:ray, t_min:float, t_max: float, object_list: list):
 	rec = hit_record()
 	hit_anything = False
@@ -31,21 +37,4 @@ def iterate_hit_list(r:ray, t_min:float, t_max: float, object_list: list):
 			rec = temp_rec
 	return hit_anything,rec
 
-
-# class hitable_list(hitable):
-# 	def __init__(self,list_l: list, n: int):
-# 		self.hit_list = list_l
-# 		self.list_size = n
-# 	def hit(self,r: ray, t_min: float ,t_max: float ,rec: hit_record):
-# 		temp_rec = hit_record()
-# 		hit_anything = False
-# 		closest_hit = t_max
-# 		for i in range(0,self.list_size):
-# 			# print(self.hit_list)
-# 			hit_anything,temp_rec = self.hit_list[i].hit(r,t_min,closest_hit,temp_rec)
-# 			if (hit_anything):
-# 				hit_anything = True
-# 				closest_hit = temp_rec.t
-# 				rec = temp_rec
-# 		return hit_anything,rec
 

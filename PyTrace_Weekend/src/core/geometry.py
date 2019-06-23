@@ -105,6 +105,8 @@ class vec3:
 
     def length(self):
         return math.sqrt(self.x0 * self.x0 + self.x1 * self.x1 + self.x2 * self.x2)
+    def squared_length(self):
+        return self.x0 * self.x0 + self.x1 * self.x1 + self.x2 * self.x2
     def dot(self,other):
         return self.x0 * other.x0 + self.x1 * other.x1 + self.x2 * other.x2
     def cross(self,other):
