@@ -1,5 +1,6 @@
 import numpy as np 
 import math
+from typing import Type
 
 class vec3:
     def __init__(self,x0: float, x1: float, x2: float):
@@ -116,11 +117,11 @@ class vec3:
         self.x1 = self.x1/length
         self.x2 = self.x2/length
         return self
-def unit_vector(vec):
+def unit_vector(vec: vec3):
     return vec/vec.length()
 
 class ray:
-    def __init__(self,a, b):
+    def __init__(self,a: vec3, b: vec3):
         self.a = a
         self.b = b
     def origin(self):

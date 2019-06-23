@@ -2,28 +2,22 @@ import sys
 import os
 sys.path.append("./src/core/")
 from geometry import * 
-import numpy as np
+from hitable import * 
+from shape import * 
 import math
-#defined with right handed coordinate system
-def hit_sphere (center,radius,ray):
-    oc = ray.origin() - center
-    a = (ray.direction()).dot(ray.direction())
-    b = 2.0 * oc.dot(ray.direction())
-    c = oc.dot(oc) - radius * radius
-    discriminant = b * b - 4 * a * c
-    if (discriminant < 0):
-        return -1.0
+
+MAX_FLOAT = sys.float_info.max
+
+def color(r: ray, world: list):
+    rec = hit_record()
+    hit_anything,rec = iterate_hit_list(r,0.0,MAX_FLOAT,world)
+    if (hit_anything):
+        # print(rec.normal)
+        return 0.5 * vec3(rec.normal.x() + 1, rec.normal.y() + 1,rec.normal.z() + 1)
     else:
-        return (-b - math.sqrt(discriminant))/(2.0 * a)
-def color(r): 
-    t = hit_sphere(vec3(0,0,-1),0.5,r)
-    if (t > 0):
-        N = unit_vector(r(t) - vec3(0,0,-1))
-        return 0.5 * vec3(N.x()+1,N.y() + 1, N.z() + 1)
-    
-    unit_direction = unit_vector(r.direction())
-    t = 0.5 * (unit_direction.y() + 1.0 )
-    return (1.0 -t ) * vec3(1.0,1.0,1.0) + t * vec3(0.5,0.7,1.0)
+        unit_direction = unit_vector(r.direction())
+        t = 0.5 * (unit_direction.y() + 1.0)
+        return (1.0 -t ) * vec3(1.0,1.0,1.0) + t * vec3(0.5,0.7,1.0)
 
 def main(filename: str,output_res: tuple):
     f = open(filename + '.ppm','w')
@@ -35,12 +29,22 @@ def main(filename: str,output_res: tuple):
     horizontal = vec3(4.0,0,0)
     vertical = vec3(0,2,0)
     origin = vec3(0,0,0)
+
+    hit_object_list = [] 
+    hit_object_list.append(sphere(vec3(0,0,-1),0.5))
+    hit_object_list.append(sphere(vec3(0,-100.5,-1),100))
+    #hit_object_list.append(sphere(vec3(2,2,-3),1))
+    # print(new_list.hit_list)
+
+
     for j in range(ny-1 ,0,-1):
         for i in range(0,nx):
             u =  float(i)/float(nx)
             v = float(j)/float(ny)
             r = ray(origin,lower_left_corner + u * horizontal + v * vertical)
-            col = color(r)
+
+            p = r(2.0)
+            col = color(r,hit_object_list)
             ir = int(255.99 * col.x0);
             ig = int(255.99 * col.x1);
             ib = int(255.99 * col.x2);
