@@ -12,19 +12,22 @@ from camera import *
 MAX_FLOAT = sys.float_info.max
 
 def random_unit_sphere():
-    p = vec3(0,0,0)
+    p = vec3(1,1,1)
     while p.squared_length() >= 1.0:
         p = 2.0 * vec3(random.random(),random.random(),random.random()) - vec3(1.0,1.0,1.0)
+        #print(p)
+    #print(p)
     return p 
 
 
-def color(r: ray, world: list):
+def color(r: ray, world: list,depth = 0,max_depth = 64):
     rec = hit_record()
     hit_anything,rec = iterate_hit_list(r,0.0,MAX_FLOAT,world)
-    if (hit_anything):
+    if (hit_anything and depth < max_depth):
         # print(rec.normal)
         target = rec.p + rec.normal + random_unit_sphere()
-        return 0.5 * color(ray(rec.p,target-rec.p),world)
+        depth += 1
+        return 0.5 * color(ray(rec.p,target-rec.p),world,depth,max_depth)
     else:
         unit_direction = unit_vector(r.direction())
         t = 0.5 * (unit_direction.y() + 1.0)
@@ -34,7 +37,7 @@ def main(filename: str,output_res: tuple):
     f = open(filename + '.ppm','w')
     nx = output_res[0];
     ny = output_res[1];
-    num_samples = 2
+    num_samples = 100
     f.write("P3\n" +  str(nx)  +  " "  + str(ny) + "\n255\n");
 
     hit_object_list = [] 

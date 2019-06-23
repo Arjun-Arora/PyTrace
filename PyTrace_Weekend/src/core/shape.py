@@ -12,8 +12,8 @@ class sphere(hitable):
 		oc = r.origin() - self.center
 		a = (r.direction()).dot(r.direction())
 		b = oc.dot(r.direction())
-		c = oc.dot(oc) - self.radius * self.radius
-		discriminant = b * b - a * c
+		c = oc.dot(oc) - (self.radius * self.radius)
+		discriminant = b * b - (a * c)
 		if (discriminant > 0 ): 
 			temp = (-b - math.sqrt(b * b - a * c))/a
 			if ((temp < t_max and temp > t_min)):
