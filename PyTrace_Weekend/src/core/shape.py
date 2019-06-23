@@ -3,12 +3,13 @@ from hitable import *
 import math
 from geometry import *
 class sphere(hitable):
-	def __init__(self,
-				 center,radius):
+	def __init__(self,center: vec3,radius: float,mat: material):
 		self.center = center
 		self.radius = radius
+		self.mat = mat
 	def hit(self,r: ray , t_min: float,t_max: float):
 		rec = hit_record()
+		rec.mat = self.mat
 		oc = r.origin() - self.center
 		a = (r.direction()).dot(r.direction())
 		b = oc.dot(r.direction())
