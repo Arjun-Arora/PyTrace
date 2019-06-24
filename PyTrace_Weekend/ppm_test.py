@@ -49,8 +49,12 @@ def main(filename: str,output_res: tuple):
     hit_object_list.append(sphere(vec3(-1,0,-1),0.5,dielectric(1.5)))
     hit_object_list.append(sphere(vec3(-1,0,-1),-0.45,dielectric(1.5)))
 
+    lookfrom = vec3(3,3,2)
+    lookat = vec3(0,0,-1)
+    dist_to_focus = (lookfrom - lookat).length()
+    aperture = 2.0
 
-    cam = camera(vec3(-2,2,1),vec3(0,0,-1),vec3(0,1,0),15,float(nx)/float(ny))
+    cam = camera(lookfrom,lookat,vec3(0,1,0),20,float(nx)/float(ny),aperture,dist_to_focus)
     with tqdm(total = ny * nx) as pbar:
         for j in range(ny-1 ,0,-1):
             for i in range(0,nx):
