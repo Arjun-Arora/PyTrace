@@ -104,7 +104,7 @@ class vec3:
             self.x2 = value
 
     def length(self):
-        return math.sqrt(self.x0 * self.x0 + self.x1 * self.x1 + self.x2 * self.x2)
+        return np.sqrt(self.x0 * self.x0 + self.x1 * self.x1 + self.x2 * self.x2)
     def squared_length(self):
         return self.x0 * self.x0 + self.x1 * self.x1 + self.x2 * self.x2
     def dot(self,other):
@@ -132,4 +132,17 @@ class ray:
         return self.b
     def __call__(self,t):
         return self.a + (t * self.b)
+
+class rayTile: 
+    def __init__(self,originTile: np.array,directionTile: np.array):
+        # originTile: m,n,3
+        # directionTile: m,n,3
+        self.originTile = originTile
+        self.directionTile = directionTile
+        def originTile(self):
+            return self.originTile
+        def direction(self):
+            return self.directionTile
+        def __call__(self,t: float):
+            return self.originTile + (t * self.directionTile)
 
