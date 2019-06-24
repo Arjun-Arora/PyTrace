@@ -40,6 +40,9 @@ def main(filename: str,output_res: tuple):
     f.write("P3\n" +  str(nx)  +  " "  + str(ny) + "\n255\n");
 
     hit_object_list = [] 
+    R = math.cos(math.pi/4)
+    # hit_object_list.append(sphere(vec3(-R,0,-1),R,lambertian(vec3(0, 0, 1))))
+    # hit_object_list.append(sphere(vec3(R,0,-1),R,lambertian(vec3(1, 0, 0))))
     hit_object_list.append(sphere(vec3(0,0,-1),0.5,lambertian(vec3(0.1,0.2,0.5))))
     hit_object_list.append(sphere(vec3(0,-100.5,-1),100,lambertian(vec3(0.8,0.8,0.0))))
     hit_object_list.append(sphere(vec3(1,0,-1),0.5,metal(vec3(0.8,0.6,0.2))))
@@ -47,7 +50,7 @@ def main(filename: str,output_res: tuple):
     hit_object_list.append(sphere(vec3(-1,0,-1),-0.45,dielectric(1.5)))
 
 
-    cam = camera()
+    cam = camera(vec3(-2,2,1),vec3(0,0,-1),vec3(0,1,0),15,float(nx)/float(ny))
     with tqdm(total = ny * nx) as pbar:
         for j in range(ny-1 ,0,-1):
             for i in range(0,nx):
@@ -67,5 +70,5 @@ def main(filename: str,output_res: tuple):
                 f.write(str(ir)  +  " "  +  str(ig) +  " "  + str(ib) + "\n");
     f.close()
 if  __name__ == "__main__":
-    main("test",(100,50))
+    main("test",(200,100))
 
