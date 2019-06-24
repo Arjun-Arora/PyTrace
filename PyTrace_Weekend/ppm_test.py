@@ -17,7 +17,7 @@ MAX_FLOAT = sys.float_info.max
 
 def color(r: ray, world: list,depth = 0,max_depth = 50):
     rec = hit_record()
-    hit_anything,rec = iterate_hit_list(r,0.001,MAX_FLOAT,world)
+    hit_anything,rec = iterate_hit_list(r,0.01,MAX_FLOAT,world)
     if (hit_anything):
         # print(rec.normal)
         scattered = ray(vec3(0,0,0),vec3(0,0,0))
@@ -40,10 +40,11 @@ def main(filename: str,output_res: tuple):
     f.write("P3\n" +  str(nx)  +  " "  + str(ny) + "\n255\n");
 
     hit_object_list = [] 
-    hit_object_list.append(sphere(vec3(0,0,-1),0.5,lambertian(vec3(0.8,0.3,0.3))))
+    hit_object_list.append(sphere(vec3(0,0,-1),0.5,lambertian(vec3(0.1,0.2,0.5))))
     hit_object_list.append(sphere(vec3(0,-100.5,-1),100,lambertian(vec3(0.8,0.8,0.0))))
     hit_object_list.append(sphere(vec3(1,0,-1),0.5,metal(vec3(0.8,0.6,0.2))))
-    hit_object_list.append(sphere(vec3(-1,0,-1),0.5,metal(vec3(0.8,0.8,0.8))))
+    hit_object_list.append(sphere(vec3(-1,0,-1),0.5,dielectric(1.5)))
+    hit_object_list.append(sphere(vec3(-1,0,-1),-0.45,dielectric(1.5)))
 
 
     cam = camera()
