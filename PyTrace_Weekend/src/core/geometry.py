@@ -4,120 +4,86 @@ from typing import Type
 
 class vec3:
     def __init__(self,x0: float, x1: float, x2: float):
-        self.x0 = x0
-        self.x1 = x1
-        self.x2 = x2
-    def x(self):
-        return self.x0
-    def y(self):
-        return self.x1
-    def z(self):
-        return self.x2
+        self.arr = np.array([x0,x1,x2]).astype(float)
+    def x(self): return self.arr[0]
+    def y(self): return self.arr[1]
+    def z(self): return self.arr[2]
+    def r(self): return self.arr[0]
+    def g(self): return self.arr[1]
+    def b(self): return self.arr[2]
     def __str__(self) -> str:
-        return "[ {} {} {} ]".format(self.x0,self.x1,self.x2)
+        return str(self.arr)
     def __add__(self,other):
-        return  vec3(self.x0 + other.x0, self.x1 + other.x1, self.x2 + other.x2)
+        return  vec3(self.x() + other.x(), self.y() + other.y(), self.z() + other.z())
     def __iadd__(self,other):
-        self.x0 = other.x0 + self.x0
-        self.x1 = other.x1 + self.x1
-        self.x2 = other.x2 + self.x2
+
+        self.arr  += other.arr
         return self
     def __sub__(self,other):
-        return vec3(self.x0 - other.x0, self.x1 - other.x1, self.x2 - other.x2)
+        return vec3(self.x() - other.x(), self.y() - other.y(), self.z() - other.z())
     def __isub__(self,other):
-        self.x0 = -other.x0 + self.x0
-        self.x1 = -other.x1 + self.x1
-        self.x2 = -other.x2 + self.x2
+        self.arr  -= other.arr 
         return self
     def __mul__(self,other):
         if isinstance(other,vec3):
-            return vec3(self.x0 * other.x0, self.x1 * other.x1, self.x2 * other.x2)
-        elif isinstance(other,float) or isinstance(other,int) or isinstance(other,long):
-            return vec3(self.x0 * other, self.x1 * other, self.x2 * other)
+            return vec3(self.x() * other.x(), self.y() * other.y(), self.z() * other.z())
         else:
-            assert(False,"cannot multiply vec3 by a non numeric class or non vec3")
+            return vec3(self.x() * other, self.y() * other, self.z() * other)
     def __rmul__(self,other):
         if isinstance(other,vec3):
-            return vec3(self.x0 * other.x0, self.x1 * other.x1, self.x2 * other.x2)
-        elif isinstance(other,float) or isinstance(other,int) or isinstance(other,long):
-            return vec3(self.x0 * other, self.x1 * other, self.x2 * other)
+            return vec3(self.x() * other.x(), self.y() * other.y(), self.z() * other.z())
         else:
-            assert(False,"cannot multiply vec3 by a non numeric class or non vec3")
+            return vec3(self.x() * other, self.y() * other, self.z() * other)
 
     def __imul__(self,other):
         if isinstance(other,vec3):
-            self.x0 = other.x0 * self.x0
-            self.x1 = other.x1 * self.x1
-            self.x2 = other.x2 * self.x2
-            return self
-        elif isinstance(other,float) or isinstance(other,int) or isinstance(other,long):
-            self.x0 = self * other
+            self.arr  *= other.arr
             return self
         else:
-            assert(False,"cannot multiply vec3 by a non numeric class or non vec3")
+            self.arr *= other
+            return self
     def __truediv__(self,other):
         if isinstance(other,vec3):
-            return vec3(self.x0 / other.x0, self.x1 / other.x1, self.x2 / other.x2)
-        elif isinstance(other,float) or isinstance(other,int) or isinstance(other,long):
-            return vec3(self.x0 / other, self.x1 / other, self.x2 / other)
+            return vec3(self.x() / other.x(), self.y() / other.y(), self.z() / other.z())
         else:
-            assert(False,"cannot divide vec3 by a non numeric class or non vec3")
+            return vec3(self.x() / other, self.y() / other, self.z() / other)
     def __idiv__(self,other):
         if isinstance(other,vec3):
-            self.x0 = self.x0 / other.x0 
-            self.x1 = self.x1 / other.x1
-            self.x2 = self.x2 / other.x2
+            self.arr /= other.arr
             return self
-        elif isinstance(other,float) or isinstance(other,int) or isinstance(other,long):
+        else:
             self = self / other
             return self
-        else: 
-            assert(False,"cannot divide vec3 by a non numeric class or non vec3")
+
     def __neg__(self):
-        return vec3(-self.x0,-self.x1,-self.x2)
+        return vec3(-self.x(),-self.y(),-self.z())
     def __eq__(self,other):
-        return ((self.x0 == other.x0) and (self.x1 == other.x1) and (self.x2 == other.x2))
+        return ((self.x() == other.x()) and (self.y() == other.y()) and (self.z() == other.z()))
     def __ne__(self,other):
         return not(self == other)
     def __pow__(self,other: float):
-        return vec3(self.x0 ** other, self.x1 ** other,self.x2 ** other)
+        return vec3(self.x() ** other, self.y() ** other,self.z() ** other)
     def __ipow__(self,other: float):
-        self.x0 = self.x0 ** other
-        self.x1 = self.x1 ** other
-        self.x2 = self.x2 ** other
+        self.arr = np.array([self.x() ** other,self.y() ** other,self.z() ** other])
         return self
     def __getitem__(self,key):
         #assert( (key <= 2 and key >= 0), "key values must be between 0 and 2")
-        if key == 0:
-            return self.x0
-        elif key == 1:
-            return self.x1
-        elif key == 2: 
-            return self.x2
+        return self.arr[key]
     def __setitem__(self,key,value):
         #assert( (key <= 2 and key >= 0), "key values must be between 0 and 2")
-        if key == 0:
-            self.x0 = value
-        elif key == 1: 
-            self.x1 = value
-        elif key == 2:
-            self.x2 = value
+        self.arr[key] = value
 
     def length(self):
-        return np.sqrt(self.x0 * self.x0 + self.x1 * self.x1 + self.x2 * self.x2)
+        return np.sqrt(self.x() ** 2 + self.y() ** 2 + self.z() ** 2)
     def squared_length(self):
-        return self.x0 * self.x0 + self.x1 * self.x1 + self.x2 * self.x2
+        return self.x() ** 2 + self.y() ** 2 + self.z() ** 2
     def dot(self,other):
-        return self.x0 * other.x0 + self.x1 * other.x1 + self.x2 * other.x2
+        return self.arr.dot(other.arr)
     def cross(self,other):
-        return vec3(self.x1*other.x2 - self.x2 * other.x1,
-                    -(self.x0*other.x2 - self.x2 * other.x0),
-                      self.x0 * other.x1 - self.x1 * other.x0)
+        new_arr = np.cross(self.arr,other.arr)
+        return vec3(new_arr[0],new_arr[1],new_arr[2])
     def normalize(self):
-        length = self.length()
-        self.x0 = self.x0/length
-        self.x1 = self.x1/length
-        self.x2 = self.x2/length
+        self.arr /= self.length()
         return self
 def unit_vector(vec: vec3):
     return vec/vec.length()

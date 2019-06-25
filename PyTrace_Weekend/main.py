@@ -103,9 +103,9 @@ def main(filename: str,output_res: tuple):
                 pbar.update(1)
                 col /= float(num_samples)
                 col = vec3(math.sqrt(col[0]),math.sqrt(col[1]),math.sqrt(col[2]))
-                ir = int(255.99 * col.x0);
-                ig = int(255.99 * col.x1);
-                ib = int(255.99 * col.x2);
+                ir = int(255.99 * col[0]);
+                ig = int(255.99 * col[1]);
+                ib = int(255.99 * col[2]);
                 output[i,j,:] = np.array([ir,ig,ib])
                 #f.write(str(ir)  +  " "  +  str(ig) +  " "  + str(ib) + "\n");
 

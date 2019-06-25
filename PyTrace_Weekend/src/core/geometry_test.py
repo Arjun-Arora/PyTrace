@@ -98,7 +98,7 @@ def vec3_basic_pow_test():
 	b = 2
 	c = vec3( 4,16,36)
 	diff = (a ** b) - c 
-	if diff.x0 <= 1e-6 and diff.x1 <= 1e-6 and diff.x2 <= 1e-6:
+	if diff.x() <= 1e-6 and diff.y() <= 1e-6 and diff.z() <= 1e-6:
 		print("success!\n")
 		return 1
 	else:
