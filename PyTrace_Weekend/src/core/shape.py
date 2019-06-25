@@ -14,21 +14,32 @@ class sphere(hitable):
 		a = (r.direction()).dot(r.direction())
 		b = oc.dot(r.direction())
 		c = oc.dot(oc) - (self.radius * self.radius)
-		discriminant = b * b - (a * c)
-		if (discriminant > 0 ): 
-			temp = (-b - math.sqrt(b * b - a * c))/a
-			if ((temp < t_max and temp > t_min)):
-				#print('hit this')
-				rec.t = temp
-				rec.p = r(rec.t)
-				rec.normal = (rec.p - self.center)/self.radius
-				return (True, rec)
-			temp = (-b + math.sqrt(b * b - a * c))/a
-			if ((temp < t_max and temp > t_min)):
-				#print('hit this')
-				rec.t = temp
-				rec.p = r(rec.t)
-				rec.normal = (rec.p - self.center)/self.radius
-				return (True, rec)
-		# print('got here with discriminant: {}'.format(discriminant))
+		discriminant = b **2 - 4 * a * c
+		#print(discriminant)
+		temp = np.where((discriminant>0), (0.0-b - np.sqrt(discriminant)) / (a * 2.0), 0.0)
+
+		rec.t = temp
+		rec.p = r(rec.t)
+		rec.normal = (rec.p - self.center)/self.radius
+		if np.any(discriminant > 0):
+			return (True,rec)
+
+
+
+		# if (discriminant > 0 ): 
+		# 	temp = (-b - math.sqrt(b * b - a * c))/a
+		# 	if ((temp < t_max and temp > t_min)):
+		# 		#print('hit this')
+		# 		rec.t = temp
+		# 		rec.p = r(rec.t)
+		# 		rec.normal = (rec.p - self.center)/self.radius
+		# 		return (True, rec)
+		# 	temp = (-b + math.sqrt(b * b - a * c))/a
+		# 	if ((temp < t_max and temp > t_min)):
+		# 		#print('hit this')
+		# 		rec.t = temp
+		# 		rec.p = r(rec.t)
+		# 		rec.normal = (rec.p - self.center)/self.radius
+		# 		return (True, rec)
+		# # print('got here with discriminant: {}'.format(discriminant))
 		return (False,rec)

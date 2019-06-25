@@ -26,9 +26,9 @@ def reflect(incoming_vector: vec3, normal: vec3):
 randomly sample a direction on the unit sphere
 '''
 def random_unit_sphere():
-    p = vec3(1,1,1)
+    p = vec3((1,1,1))
     while p.squared_length() >= 1.0:
-        p = 2.0 * vec3(random.random(),random.random(),random.random()) - vec3(1.0,1.0,1.0)
+        p = vec3((random.random(),random.random(),random.random())) * 2.0 - vec3((1.0,1.0,1.0))
     return p 
 
 '''
@@ -38,7 +38,7 @@ def refract(incoming_vector: vec3, normal: vec3, ni_over_nt: float):
 	uv = unit_vector(incoming_vector)
 	dt = uv.dot(normal)
 	refracted = vec3(0,0,0)
-	discriminant = 1.0 - ni_over_nt * ni_over_nt * (1-dt*dt)
+	discriminant = 1.0 - (1-dt*dt) * ni_over_nt * ni_over_nt 
 	if(discriminant > 0):
 		refracted = ni_over_nt * (uv - normal * dt) - normal * sqrt(discriminant)
 		return True,refracted
