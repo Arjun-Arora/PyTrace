@@ -10,7 +10,7 @@ from shape import *
 from camera import * 
 from material import * 
 import numpy as np
-import matplotlib
+import matplotlib.pyplot as plt
 import multiprocessing
 
 MAX_FLOAT = sys.float_info.max
@@ -18,7 +18,7 @@ MAX_FLOAT = sys.float_info.max
 
 
 
-def color(r: ray, world: list,depth = 0,max_depth = 4):
+def color(r: ray, world: list,depth = 0,max_depth = 2):
     rec = hit_record()
     hit_anything,rec = iterate_hit_list(r,0.001,MAX_FLOAT,world)
     if (hit_anything):
@@ -67,7 +67,7 @@ def main(filename: str,output_res: tuple):
     f = open(filename + '.ppm','w')
     nx = output_res[0];
     ny = output_res[1];
-    num_samples = 256
+    num_samples = 100
 
     output = np.zeros((nx,ny,3))
 
@@ -75,13 +75,13 @@ def main(filename: str,output_res: tuple):
 
     hit_object_list = [] 
     R = math.cos(math.pi/4)
-    # hit_object_list.append(sphere(vec3(-R,0,-1),R,lambertian(vec3(0, 0, 1))))
-    # hit_object_list.append(sphere(vec3(R,0,-1),R,lambertian(vec3(1, 0, 0))))
-    # hit_object_list.append(sphere(vec3(0,0,-1),0.5,lambertian(vec3(0.1,0.2,0.5))))
-    # hit_object_list.append(sphere(vec3(0,-100.5,-1),100,lambertian(vec3(0.8,0.8,0.0))))
-    # hit_object_list.append(sphere(vec3(1,0,-1),0.5,metal(vec3(0.8,0.6,0.2))))
-    # hit_object_list.append(sphere(vec3(-1,0,-1),0.5,dielectric(1.5)))
-    # hit_object_list.append(sphere(vec3(-1,0,-1),-0.45,dielectric(1.5)))
+    hit_object_list.append(sphere(vec3(-R,0,-1),R,lambertian(vec3(0, 0, 1))))
+    hit_object_list.append(sphere(vec3(R,0,-1),R,lambertian(vec3(1, 0, 0))))
+    hit_object_list.append(sphere(vec3(0,0,-1),0.5,lambertian(vec3(0.1,0.2,0.5))))
+    hit_object_list.append(sphere(vec3(0,-100.5,-1),100,lambertian(vec3(0.8,0.8,0.0))))
+    hit_object_list.append(sphere(vec3(1,0,-1),0.5,metal(vec3(0.8,0.6,0.2))))
+    hit_object_list.append(sphere(vec3(-1,0,-1),0.5,dielectric(1.5)))
+    hit_object_list.append(sphere(vec3(-1,0,-1),-0.45,dielectric(1.5)))
     hit_object_list = random_scene()
     #print("hit this")
     lookfrom = vec3(13,2,3)
@@ -109,9 +109,9 @@ def main(filename: str,output_res: tuple):
                 output[i,j,:] = np.array([ir,ig,ib])
                 #f.write(str(ir)  +  " "  +  str(ig) +  " "  + str(ib) + "\n");
 
-    matplotlib.image.imsave('output.png',output)
+    plt.imsave('output.png',np.rot90(output).astype(int))
     #f.close()
 
 if  __name__ == "__main__":
-    main("test",(1200,800))
+    main("test",(200,100))
 
