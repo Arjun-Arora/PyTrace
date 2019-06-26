@@ -22,8 +22,8 @@ def color(r: ray,world: list,tile_shape):
 	t = 0
 	tile_x,tile_y = tile_shape
 	hit_color = tile(np.zeros((tile_x,tile_y,3)))
-	hit_anything,rec_list = iterate_hit_list(r,tile(np.ones((nx,ny)) * 0.001),
-							tile(np.ones((nx,ny)) * MAX_FLOAT),world)
+	hit_anything,rec_list = iterate_hit_list(r,tile(np.ones((tile_x,tile_y)) * 0.001),
+							tile(np.ones((tile_x,tile_y)) * MAX_FLOAT),world)
 	#print(len(rec_list))
 	for record in rec_list:
 		N = record.normal
@@ -55,18 +55,9 @@ def main(nx: float = 200, ny: float = 100):
 	v = tile(j/ny)
 
 	r = ray(origin,lower_left_corner + u * horizontal + v * vertical)
-	#print(len(hit_object_list))
-	col = color(r,hit_object_list,output_shape=(nx,ny))
+	#for 
+	col = color(r,hit_object_list,tile_shape=(nx,ny))
 
-	#print(unit_vector(vec3(1,2,3)).shape)
-
-	#b = np.ones_like(r) * 0.2 
-
-	#colors will be assumed to be (..,3)
-	# this assumes that all functions will operate on 3-vectors
-	#col = np.dstack((r,g,b))
-	#print(col.shape)
-	#unit_vector(col)
 	ir = 255.99 * col[:,:,0]
 	ig = 255.99 * col[:,:,1]
 	ib = 255.99 * col[:,:,2]
