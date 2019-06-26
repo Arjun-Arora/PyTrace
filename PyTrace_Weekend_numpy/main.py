@@ -8,25 +8,27 @@ import matplotlib.pyplot as plt
 def color(r: ray):
 	#print(r.direction)
 	unit_direction = unit_vector(r.direction())
-	t = coordinatize(0.5 * (unit_direction[:,:,1]) + 1.0)
-	return (1.0-t) * vectorize(np.array((1.0,1.0,1.0))) + t * vectorize(np.array((0.5,0.7,1.0)))
+	t = tile(0.5 * (unit_direction[:,:,1]) + 1.0)
+	return (1.0-t) * vec3(1.0,1.0,1.0) + t * vec3(0.5,0.7,1.0)
 
-def main(nx: float = 1200, ny: float = 800):
+def main(nx: float = 200, ny: float = 100):
 	j = np.tile(np.arange(0,ny,1),reps=(nx,1))
 	i = np.tile(np.arange(0,nx,1),reps=(ny,1)).T
 
-	lower_left_corner = vectorize(np.array((-2.0,-1.0,-1.0)))
-	horizontal = vectorize(np.array((4.0,0,0)))
-	vertical = vectorize(np.array((0.0,2,0)))
-	origin = vectorize(np.array((0.0,0.0,0.0)))
+	lower_left_corner = vec3(-2.0,-1.0,-1.0)
+	horizontal = vec3(4.0,0,0)
+	vertical = vec3(0.0,2,0)
+	origin = vec3(0.0,0.0,0.0)
 
 	# print(i.shape)
 	# print(j)
-	u = coordinatize(i/nx)
-	v = coordinatize(j/ny)
+	u = tile(i/nx)
+	v = tile(j/ny)
 
 	r = ray(origin,lower_left_corner + u * horizontal + v * vertical)
 	col = color(r)
+
+	#print(unit_vector(vec3(1,2,3)).shape)
 
 	#b = np.ones_like(r) * 0.2 
 
