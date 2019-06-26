@@ -11,7 +11,7 @@ def tile(arr: np.ndarray):
 	#assert(len(arr.shape),2)
 	if len(arr.shape) == 2:
 		return arr[:,:,None]
-	elif len(arr.shape == 3):
+	elif len(arr.shape) == 3:
 		return arr
 	else:
 		return None
@@ -20,7 +20,12 @@ def vec3(x0,x1,x2):
 	converts 3 values to be a tile of shape 1 x 1 x 3, also known as a vec3
 	also converts 2D arrays to be a tile of shape m x n x 3 , also known as a tile of vec3 
 	'''
-	if isinstance(x0,np.ndarray) and isinstance(x1,np.ndarray) and isinstance(x2,np.ndarray) and len(x0.shape)==2:
+	if isinstance(x0,np.ndarray) and \
+	   isinstance(x1,np.ndarray) and \
+	   isinstance(x2,np.ndarray) and \
+	   len(x0.shape)==2 and \
+	   len(x1.shape)==2 and \
+	   len(x2.shape):
 		return np.dstack((x0,x1,x2))
 	else:
 		return np.array((x0,x1,x2))[None,None,:]

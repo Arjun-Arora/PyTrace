@@ -2,29 +2,37 @@ import sys
 sys.path.append("./src/core/")
 from  ray import * 
 from utils import *
+from hitable import * 
+from geometry import * 
 import numpy as np
 import matplotlib.pyplot as plt
 
+MAX_FLOAT = sys.float_info.max
 
-def hit_sphere(center: np.ndarray ,radius: float,r: ray):
-	oc = r.origin() - center
+# def hit_sphere(center: np.ndarray ,radius: float,r: ray):
+# 	oc = r.origin() - center
 
-	a = tiledot(r.direction(),r.direction())
-	b = 2.0 * tiledot(oc,r.direction())
-	c =  tiledot(oc,oc) - radius ** 2
-	discriminant = b ** 2 - 4 * a * c 
-	return np.where((discriminant > 0),(0 - b - np.sqrt(discriminant))/ (a * 2.0),-1.0)
+# 	a = tiledot(r.direction(),r.direction())
+# 	b = 2.0 * tiledot(oc,r.direction())
+# 	c =  tiledot(oc,oc) - radius ** 2
+# 	discriminant = b ** 2 - 4 * a * c 
+# 	return np.where((discriminant > 0),(0 - b - np.sqrt(discriminant))/ (a * 2.0),-1.0)
 
-def color(r: ray):
-	#print(r.direction)
-	t = tile(hit_sphere(vec3(0,0,-1),0.5,r))
-	N = unit_vector((r(t) - vec3(0, 0, -1)))
+def color(r: ray,world: list,tile_shape):
+	t = 0
+	tile_x,tile_y = tile_shape
+	hit_color = tile(np.zeros((tile_x,tile_y,3)))
+	hit_anything,rec_list = iterate_hit_list(r,tile(np.ones((nx,ny)) * 0.001),
+							tile(np.ones((nx,ny)) * MAX_FLOAT),world)
+	#print(len(rec_list))
+	for record in rec_list:
+		N = record.normal
+		mask = ~np.all(record.t == -1.0, axis=-1)
+		t += tile(mask) * record.t
+		hit_color += tile(mask) * vec3(N[:,:,0] + 1,N[:,:,1] + 1,N[:,:,2] + 1) * 0.5
 
-	#print(N + 1)
-
-	hit_color = vec3(N[:,:,0] + 1,N[:,:,1] + 1,N[:,:,2] + 1) * 0.5
+	
 	unit_direction = unit_vector(r.direction())
-
 	t2 = tile(0.5 * (unit_direction[:,:,1] + 1.0))
 	sky_color = vec3(1.0,1.0,1.0) * (1.0 - t2) + vec3(0.5,0.7,1.0) * t2
 	return np.where(t > 0.0, hit_color,sky_color)
@@ -37,6 +45,9 @@ def main(nx: float = 200, ny: float = 100):
 	horizontal = vec3(4.0,0,0)
 	vertical = vec3(0.0,2,0)
 	origin = vec3(0.0,0.0,0.0)
+	hit_object_list = []
+	hit_object_list.append(sphere(vec3(0,0,-1),0.5))
+	hit_object_list.append(sphere(vec3(0,-100.5,-1),100))
 
 	# print(i.shape)
 	# print(j)
@@ -44,7 +55,8 @@ def main(nx: float = 200, ny: float = 100):
 	v = tile(j/ny)
 
 	r = ray(origin,lower_left_corner + u * horizontal + v * vertical)
-	col = color(r)
+	#print(len(hit_object_list))
+	col = color(r,hit_object_list,output_shape=(nx,ny))
 
 	#print(unit_vector(vec3(1,2,3)).shape)
 
