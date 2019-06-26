@@ -5,11 +5,29 @@ from utils import *
 import numpy as np
 import matplotlib.pyplot as plt
 
+
+def hit_sphere(center: np.ndarray ,radius: float,r: ray):
+	oc = r.origin() - center
+
+	a = tiledot(r.direction(),r.direction())
+	b = 2.0 * tiledot(oc,r.direction())
+	c =  tiledot(oc,oc) - radius ** 2
+	discriminant = b ** 2 - 4 * a * c 
+	return np.where((discriminant > 0),(0 - b - np.sqrt(discriminant))/ (a * 2.0),-1.0)
+
 def color(r: ray):
 	#print(r.direction)
+	t = tile(hit_sphere(vec3(0,0,-1),0.5,r))
+	N = unit_vector((r(t) - vec3(0, 0, -1)))
+
+	#print(N + 1)
+
+	hit_color = vec3(N[:,:,0] + 1,N[:,:,1] + 1,N[:,:,2] + 1) * 0.5
 	unit_direction = unit_vector(r.direction())
-	t = tile(0.5 * (unit_direction[:,:,1]) + 1.0)
-	return (1.0-t) * vec3(1.0,1.0,1.0) + t * vec3(0.5,0.7,1.0)
+
+	t2 = tile(0.5 * (unit_direction[:,:,1] + 1.0))
+	sky_color = vec3(1.0,1.0,1.0) * (1.0 - t2) + vec3(0.5,0.7,1.0) * t2
+	return np.where(t > 0.0, hit_color,sky_color)
 
 def main(nx: float = 200, ny: float = 100):
 	j = np.tile(np.arange(0,ny,1),reps=(nx,1))
