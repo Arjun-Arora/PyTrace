@@ -62,8 +62,7 @@ def random_scene():
     hit_object_list.append(sphere( vec3(4, 1, 0), 1.0, metal(vec3(0.7,0.6,0.5),0.0)))
     return hit_object_list
 
-def main(filename: str,output_res: tuple,num_samples):
-    f = open(filename + '.ppm','w')
+def main(filename: str = 'output',output_res: tuple = (200,100),num_samples= 100):
     nx = output_res[0];
     ny = output_res[1];
     num_samples = num_samples
@@ -108,9 +107,9 @@ def main(filename: str,output_res: tuple,num_samples):
                 output[i,j,:] = np.array([ir,ig,ib])
                 #f.write(str(ir)  +  " "  +  str(ig) +  " "  + str(ib) + "\n");
 
-    plt.imsave('output.png',np.rot90(output).astype(int))
+    plt.imsave(filename + ".png",np.rot90(output).astype(int))
     #f.close()
 
 if  __name__ == "__main__":
-    main("test",(200,100),100)
+    main("output",(200,100),100)
 
