@@ -30,12 +30,12 @@ class sphere(hitable):
 		discriminant = tile(b ** 2 - 4 * a * c )
 		dist_to_hit = tile((0 - b - np.sqrt(discriminant)))
 		dist_to_hit_2 = tile((0 - b + np.sqrt(discriminant)))
+		dist_to_hit = np.where(np.isnan(dist_to_hit),dist_to_hit_2,dist_to_hit)
 
 		t = tile(np.where((discriminant > 0) * (dist_to_hit > t_min) * (dist_to_hit < t_max),
 						  dist_to_hit/(a * 2.0),-1.0))
-		p = np.where(t > 0,r(t),0)
-
-		normal = np.where(tile(~np.all(p == 0,axis=-1)),(p - self.center)/self.radius,0)
+		p = r(t)
+		normal =((p - self.center)/self.radius)
 		rec = hit_record(t,p,normal)
 		#print(np.any(rec.t > 0))
 		return np.any(rec.t > 0),rec 

@@ -3,3 +3,5 @@
 *.pyc
 PyTrace_Weekend/src/core/__pycache__/camera.cpython-37.pyc
 PyTrace_Weekend/src/core/__pycache__/geometry.cpython-37.pyc
+PyTrace_Weekend_numpy/.DS_Store
+.DS_Store

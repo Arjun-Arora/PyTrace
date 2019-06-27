@@ -28,20 +28,20 @@ def color(r: ray,world: list,tile_shape,depth = 0,max_depth = 4):
 	hit_color = tile(np.zeros((tile_x,tile_y,3)))
 	hit_anything,rec_list = iterate_hit_list(r,tile(np.ones((tile_x,tile_y)) * 0.01),
 							tile(np.ones((tile_x,tile_y)) * MAX_FLOAT),world)
-	# if hit_anything and depth <= max_depth:
-	# 	for rec in rec_list:
-	# 		#print(depth)
-	# 		mask = ~np.all(rec.t == -1.0, axis=-1)
-	# 		t += tile(mask) * rec.t
-	# 		#rec.t = tile(mask ) * rec.t
-	# 		target = rec.p + rec.normal + tile(mask) * random_in_unit_sphere(rec.normal)
-	# 		hit_color +=  tile(mask) * 0.5 * color(ray(rec.p, target-rec.p),world,tile_shape,depth+1,max_depth)
+	if hit_anything and depth <= max_depth:
+		for rec in rec_list:
+			#masks out all values that we didn't get hits for 
+			mask = ~np.all(rec.t == -1.0, axis=-1)
+			t += tile(mask) * rec.t
+			target = rec.p + rec.normal + tile(mask) * random_in_unit_sphere(rec.normal)
+			#mask out all color contributions that are calculated incorrectly using a mask
+			hit_color += 0.5 * tile(mask)  * color(ray(rec.p,  target-rec.p),world,tile_shape,depth+1,max_depth)
 
-	for record in rec_list:
-		N = record.normal
-		mask = ~np.all(record.t == -1.0, axis=-1)
-		t += tile(mask) * record.t
-		hit_color += tile(mask) * vec3(N[:,:,0] + 1,N[:,:,1] + 1,N[:,:,2] + 1) * 0.5
+	# for record in rec_list:
+	# 	N = record.normal
+	# 	mask = ~np.all(record.t == -1.0, axis=-1)
+	# 	t += tile(mask) * record.t
+	# 	hit_color += tile(mask) * vec3(N[:,:,0] + 1,N[:,:,1] + 1,N[:,:,2] + 1) * 0.5
 
 	
 	unit_direction = unit_vector(r.direction())
@@ -73,9 +73,9 @@ def main(nx: float = 200, ny: float = 100,ns: float = 100):
 	ib = 255.99 * col[:,:,2]
 	output = np.dstack((ir,ig,ib))
 	# print(output.shape)
-	plt.imsave("output.png",np.rot90(output.astype(int)))
+	plt.imsave("output_2.png",np.rot90(output.astype(int)))
 if __name__ == "__main__": 
-	main(200,100,100)
+	main(200,100,10)
 	# X = random_in_unit_sphere(np.random.randn(200,100,3))
 	# fig = plt.figure()
 	# ax = fig.add_subplot(111)

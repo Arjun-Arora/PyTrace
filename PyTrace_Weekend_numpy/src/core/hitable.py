@@ -33,17 +33,15 @@ def iterate_hit_list(r:ray, t_min:float, t_max: float, object_list: list):
 	hit_anything = False
 	closest_hit = t_max
 	rec_list = []
-	#print(len(object_list))
 	for i in range(0,len(object_list)):
 		#print(i)
 		hit_object,temp_rec = object_list[i].hit(r,t_min,closest_hit)
-		#print("normal: {},i : {}".format(temp_rec.normal,i))
+		#print(hit_object)
 		if hit_object:
-			#print("hit this")
 			hit_anything = True
 			closest_hit = np.minimum(np.where(temp_rec.t > 0,temp_rec.t,MAX_FLOAT),closest_hit)
-			#print(np.unique(closest_hit))
 			rec_list.append(temp_rec)
+	# print(hit_anything)
 	return hit_anything,rec_list
 
 
