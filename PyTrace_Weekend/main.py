@@ -18,7 +18,7 @@ MAX_FLOAT = sys.float_info.max
 
 
 
-def color(r: ray, world: list,depth = 0,max_depth = 2):
+def color(r: ray, world: list,depth = 0,max_depth = 4):
     rec = hit_record()
     hit_anything,rec = iterate_hit_list(r,0.001,MAX_FLOAT,world)
     if (hit_anything):
@@ -63,11 +63,11 @@ def random_scene():
     hit_object_list.append(sphere( vec3(4, 1, 0), 1.0, metal(vec3(0.7,0.6,0.5),0.0)))
     return hit_object_list
 
-def main(filename: str,output_res: tuple):
+def main(filename: str,output_res: tuple,num_samples):
     f = open(filename + '.ppm','w')
     nx = output_res[0];
     ny = output_res[1];
-    num_samples = 100
+    num_samples = num_samples
 
     output = np.zeros((nx,ny,3))
 
@@ -113,5 +113,5 @@ def main(filename: str,output_res: tuple):
     #f.close()
 
 if  __name__ == "__main__":
-    main("test",(200,100))
+    main("test",(200,100,100))
 

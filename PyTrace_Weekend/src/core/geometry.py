@@ -2,7 +2,7 @@ import numpy as np
 import math
 from typing import Type
 
-class vec3:
+class vec3(object):
     def __init__(self,x0: float, x1: float, x2: float):
         self.x0 = x0
         self.x1 = x1
@@ -32,17 +32,10 @@ class vec3:
     def __mul__(self,other):
         if isinstance(other,vec3):
             return vec3(self.x0 * other.x0, self.x1 * other.x1, self.x2 * other.x2)
-        elif isinstance(other,float) or isinstance(other,int) or isinstance(other,long):
-            return vec3(self.x0 * other, self.x1 * other, self.x2 * other)
         else:
-            assert(False,"cannot multiply vec3 by a non numeric class or non vec3")
-    def __rmul__(self,other):
-        if isinstance(other,vec3):
-            return vec3(self.x0 * other.x0, self.x1 * other.x1, self.x2 * other.x2)
-        elif isinstance(other,float) or isinstance(other,int) or isinstance(other,long):
             return vec3(self.x0 * other, self.x1 * other, self.x2 * other)
-        else:
-            assert(False,"cannot multiply vec3 by a non numeric class or non vec3")
+
+    __rmul__ = __mul__
 
     def __imul__(self,other):
         if isinstance(other,vec3):
@@ -50,33 +43,30 @@ class vec3:
             self.x1 = other.x1 * self.x1
             self.x2 = other.x2 * self.x2
             return self
-        elif isinstance(other,float) or isinstance(other,int) or isinstance(other,long):
+        else:
             self.x0 = self * other
             return self
-        else:
-            assert(False,"cannot multiply vec3 by a non numeric class or non vec3")
     def __truediv__(self,other):
         if isinstance(other,vec3):
             return vec3(self.x0 / other.x0, self.x1 / other.x1, self.x2 / other.x2)
-        elif isinstance(other,float) or isinstance(other,int) or isinstance(other,long):
-            return vec3(self.x0 / other, self.x1 / other, self.x2 / other)
         else:
-            assert(False,"cannot divide vec3 by a non numeric class or non vec3")
+            return vec3(self.x0 / other, self.x1 / other, self.x2 / other)
     def __idiv__(self,other):
         if isinstance(other,vec3):
             self.x0 = self.x0 / other.x0 
             self.x1 = self.x1 / other.x1
             self.x2 = self.x2 / other.x2
             return self
-        elif isinstance(other,float) or isinstance(other,int) or isinstance(other,long):
+        else:
             self = self / other
             return self
-        else: 
-            assert(False,"cannot divide vec3 by a non numeric class or non vec3")
     def __neg__(self):
         return vec3(-self.x0,-self.x1,-self.x2)
     def __eq__(self,other):
-        return ((self.x0 == other.x0) and (self.x1 == other.x1) and (self.x2 == other.x2))
+        if not isinstance(other,vec3):
+            return False
+        else:
+            return ((self.x0 == other.x0) and (self.x1 == other.x1) and (self.x2 == other.x2))
     def __ne__(self,other):
         return not(self == other)
     def __pow__(self,other: float):
@@ -88,7 +78,7 @@ class vec3:
         return self
     def __getitem__(self,key):
         #assert( (key <= 2 and key >= 0), "key values must be between 0 and 2")
-        if key == 0:
+        if   key == 0:
             return self.x0
         elif key == 1:
             return self.x1
@@ -96,7 +86,7 @@ class vec3:
             return self.x2
     def __setitem__(self,key,value):
         #assert( (key <= 2 and key >= 0), "key values must be between 0 and 2")
-        if key == 0:
+        if  key == 0:
             self.x0 = value
         elif key == 1: 
             self.x1 = value
@@ -104,7 +94,7 @@ class vec3:
             self.x2 = value
 
     def length(self):
-        return np.sqrt(self.x0 * self.x0 + self.x1 * self.x1 + self.x2 * self.x2)
+        return math.sqrt(self.x0 * self.x0 + self.x1 * self.x1 + self.x2 * self.x2)
     def squared_length(self):
         return self.x0 * self.x0 + self.x1 * self.x1 + self.x2 * self.x2
     def dot(self,other):

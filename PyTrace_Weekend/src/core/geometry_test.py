@@ -62,6 +62,16 @@ def vec3_basic_mult_test():
 	else:
 		print("failed\n")
 		return 0 
+def vec3_basic_rmult_test():
+	print("vec3_basic_rmult_test")
+	a = vec3(1,2,3)
+	b = vec3(5,5,5)
+	if a * 5 == a * b and 5 * a == a * b:
+		print("success!\n")
+		return 1
+	else:
+		print("failed\n")
+		return 0 
 def vec3_basic_div_test():
 	print("vec3_basic_div_test")
 	a = vec3(1,2,3)
@@ -179,6 +189,7 @@ if __name__== "__main__":
 	vec3_basic_iadd_test()
 	vec3_basic_isub_test()
 	vec3_basic_mult_test()
+	vec3_basic_rmult_test()
 	vec3_basic_div_test()
 	vec3_basic_idiv_test()
 	vec3_basic_neq_test()
