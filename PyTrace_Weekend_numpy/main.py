@@ -13,6 +13,13 @@ from mpl_toolkits.mplot3d import Axes3D
 
 MAX_FLOAT = sys.float_info.max
 
+def random_in_unit_sphere(arr: np.ndarray):
+	shape = arr.shape
+	random_tile_in_sphere = np.random.randn(*shape)
+	# print(random_tile_in_sphere.shape)
+	# print(np.linalg.norm(random_tile_in_sphere,axis=2).shape)
+	random_tile_in_sphere /= tile(np.linalg.norm(random_tile_in_sphere,axis=-1))
+	return  random_tile_in_sphere
 
 	
 
@@ -21,7 +28,7 @@ def color(r: ray,world: list,tile_shape,depth = 0,max_depth = 4):
 	target = 0
 	tile_x,tile_y = tile_shape
 	hit_color = tile(np.zeros((tile_x,tile_y,3)))
-	hit_anything,rec_list,closest_hit = iterate_hit_list(r,tile(np.ones((tile_x,tile_y)) * 0.01),
+	hit_anything,rec_list,closest_hit = iterate_hit_list(r,tile(np.ones((tile_x,tile_y)) * 0.001),
 										tile(np.ones((tile_x,tile_y)) * MAX_FLOAT),world)
 	# if hit_anything and depth <= max_depth:
 	# 	for rec in rec_list:
@@ -31,16 +38,25 @@ def color(r: ray,world: list,tile_shape,depth = 0,max_depth = 4):
 	# 		if if_scatter:
 	# 		#masks out all values that we didn't get hits for 
 	# 			mask = ~np.all(rec.t == -1.0, axis=-1)
-	# 			t += tile(mask) * rec.t
+	# 			t += tile(mask) * (closest_hit == rec.t) *  rec.t
 	# 			#target = rec.p + rec.normal + tile(mask) * random_in_unit_sphere(rec.normal)
 	# 			#mask out all color contributions that are calculated incorrectly using a mask
 	# 			hit_color += 0.5 * tile(mask) * (closest_hit == rec.t) * attenuation *  color(scattered,world,tile_shape,depth+1,max_depth)
 
-	for record in rec_list:
-		N = record.normal
-		mask = ~np.all(record.t == -1.0, axis=-1)
-		t += tile(mask) * record.t
-		hit_color += tile(mask) * (closest_hit == record.t) * vec3(N[:,:,0] + 1,N[:,:,1] + 1,N[:,:,2] + 1) * 0.5
+
+	if hit_anything and depth <= max_depth:
+		for rec in rec_list:
+			mask =  tile(~np.all(rec.t == -1.0, axis=-1))  * (closest_hit == rec.t)
+			t += mask * rec.t
+			target = rec.p + rec.normal + random_in_unit_sphere(rec.normal)
+			hit_color += mask * 0.5 * color(ray(rec.p, target - rec.p),world,tile_shape,depth+1,max_depth)
+
+
+	# for record in rec_list:
+	# 	N = record.normal
+	# 	mask = ~np.all(record.t == -1.0, axis=-1)
+	# 	t += tile(mask) *  (closest_hit == record.t) * record.t
+	# 	hit_color += tile(mask) * (closest_hit == record.t) * vec3(N[:,:,0] + 1,N[:,:,1] + 1,N[:,:,2] + 1) * 0.5
 
 	
 	unit_direction = unit_vector(r.direction())
@@ -80,7 +96,7 @@ def main(nx: float = 200, ny: float = 100,ns: float = 100):
 	# print(output.shape)
 	plt.imsave("output.png",np.rot90(output.astype(int)))
 if __name__ == "__main__": 
-	main(200,100,100)
+	main(200,100,10)
 	# X = random_in_unit_sphere(np.random.randn(200,100,3))
 	# fig = plt.figure()
 	# ax = fig.add_subplot(111)
