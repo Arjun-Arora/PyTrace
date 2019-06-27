@@ -11,8 +11,7 @@ from camera import *
 from material import * 
 import numpy as np
 import matplotlib.pyplot as plt
-import multiprocessing
-
+import cProfile
 MAX_FLOAT = sys.float_info.max
 
 
@@ -113,5 +112,5 @@ def main(filename: str,output_res: tuple,num_samples):
     #f.close()
 
 if  __name__ == "__main__":
-    main("test",(200,100,100))
+    main("test",(200,100),100)
 
