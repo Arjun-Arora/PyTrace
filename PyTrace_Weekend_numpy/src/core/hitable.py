@@ -42,8 +42,9 @@ def iterate_hit_list(r:ray, t_min:float, t_max: float, object_list: list):
 		if hit_object:
 			hit_anything = True
 			closest_hit = np.minimum(np.where(temp_rec.t > 0,temp_rec.t,MAX_FLOAT),closest_hit)
+			#closest_hit = np.minimum(temp_rec.t, closest_hit)
 			rec_list.append(temp_rec)
 	# print(hit_anything)
-	return hit_anything,rec_list
+	return hit_anything,rec_list,closest_hit
 
 
