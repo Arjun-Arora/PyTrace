@@ -7,16 +7,36 @@ from geometry import *
 from camera import *  
 import numpy as np
 import matplotlib.pyplot as plt
+from tqdm import tqdm
+from mpl_toolkits.mplot3d import Axes3D
 
 MAX_FLOAT = sys.float_info.max
 
-def color(r: ray,world: list,tile_shape):
+def random_in_unit_sphere(arr: np.ndarray):
+	shape = arr.shape
+	random_tile_in_sphere = np.random.randn(*shape)
+	# print(random_tile_in_sphere.shape)
+	# print(np.linalg.norm(random_tile_in_sphere,axis=2).shape)
+	random_tile_in_sphere /= tile(np.linalg.norm(random_tile_in_sphere,axis=2))
+	return  random_tile_in_sphere
+	
+
+def color(r: ray,world: list,tile_shape,depth = 0,max_depth = 4):
 	t = 0
+	target = 0
 	tile_x,tile_y = tile_shape
 	hit_color = tile(np.zeros((tile_x,tile_y,3)))
-	hit_anything,rec_list = iterate_hit_list(r,tile(np.ones((tile_x,tile_y)) * 0.001),
+	hit_anything,rec_list = iterate_hit_list(r,tile(np.ones((tile_x,tile_y)) * 0.01),
 							tile(np.ones((tile_x,tile_y)) * MAX_FLOAT),world)
-	#print(len(rec_list))
+	# if hit_anything and depth <= max_depth:
+	# 	for rec in rec_list:
+	# 		#print(depth)
+	# 		mask = ~np.all(rec.t == -1.0, axis=-1)
+	# 		t += tile(mask) * rec.t
+	# 		#rec.t = tile(mask ) * rec.t
+	# 		target = rec.p + rec.normal + tile(mask) * random_in_unit_sphere(rec.normal)
+	# 		hit_color +=  tile(mask) * 0.5 * color(ray(rec.p, target-rec.p),world,tile_shape,depth+1,max_depth)
+
 	for record in rec_list:
 		N = record.normal
 		mask = ~np.all(record.t == -1.0, axis=-1)
@@ -38,12 +58,14 @@ def main(nx: float = 200, ny: float = 100,ns: float = 100):
 	hit_object_list.append(sphere(vec3(0,-100.5,-1),100))
 	col = np.zeros((nx,ny,3))
 	cam = camera()
-	for s in range(0,ns):
-		u = tile((i + np.random.rand(nx,ny))/nx)
-		v = tile((j + np.random.rand(nx,ny))/ny) 
+	with tqdm(total=ns) as pbar:
+		for s in range(0,ns):
+			u = tile((i + np.random.rand(nx,ny))/nx)
+			v = tile((j + np.random.rand(nx,ny))/ny) 
 
-		r = cam.get_ray(u,v)
-		col += color(r,hit_object_list,tile_shape=(nx,ny))
+			r = cam.get_ray(u,v)
+			col += color(r,hit_object_list,tile_shape=(nx,ny))
+			pbar.update(1)
 
 	col /= float(ns)
 	ir = 255.99 * col[:,:,0]
@@ -54,3 +76,8 @@ def main(nx: float = 200, ny: float = 100,ns: float = 100):
 	plt.imsave("output.png",np.rot90(output.astype(int)))
 if __name__ == "__main__": 
 	main(200,100,100)
+	# X = random_in_unit_sphere(np.random.randn(200,100,3))
+	# fig = plt.figure()
+	# ax = fig.add_subplot(111)
+	# ax.scatter(X[:,:,0],X[:,:,1],X[:,:,2])
+	# plt.show()

@@ -29,16 +29,13 @@ class sphere(hitable):
 		c =  tile(tiledot(oc,oc) - self.radius ** 2)
 		discriminant = tile(b ** 2 - 4 * a * c )
 		dist_to_hit = tile((0 - b - np.sqrt(discriminant)))
-		# print(t_min.shape)
-		# print(t_max.shape)
-		# print((dist_to_hit > t_min).shape)
-		# print(discriminant.shape)
-		# print(dist_to_hit.shape)
-		# print(dist_to_hit < t_max)
+		dist_to_hit_2 = tile((0 - b + np.sqrt(discriminant)))
+
 		t = tile(np.where((discriminant > 0) * (dist_to_hit > t_min) * (dist_to_hit < t_max),
 						  dist_to_hit/(a * 2.0),-1.0))
-		p = r(t)
-		normal = np.where( p != r(-1.0),(p - self.center)/self.radius,0)
+		p = np.where(t > 0,r(t),0)
+
+		normal = np.where(tile(~np.all(p == 0,axis=-1)),(p - self.center)/self.radius,0)
 		rec = hit_record(t,p,normal)
 		#print(np.any(rec.t > 0))
 		return np.any(rec.t > 0),rec 
