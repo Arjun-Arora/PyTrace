@@ -7,7 +7,7 @@ import sys
 MAX_FLOAT = sys.float_info.max
 
 class sphere(hitable):
-	def __init__(self,center: np.ndarray, radius: float):
+	def __init__(self,center: np.ndarray, radius: float,mat):
 		'''
 		center: vec3 center of sphere
 		radius: float radius of sphere
@@ -15,6 +15,7 @@ class sphere(hitable):
 		'''
 		self.center = center
 		self.radius = radius
+		self.mat = mat
 	def hit(self,r: ray,t_min: np.ndarray,t_max: np.ndarray):
 		'''
 		t_min: tile of minimum values along rays to hit (m x n x 1)
@@ -30,12 +31,14 @@ class sphere(hitable):
 		discriminant = tile(b ** 2 - 4 * a * c )
 		dist_to_hit = tile((0 - b - np.sqrt(discriminant)))
 		dist_to_hit_2 = tile((0 - b + np.sqrt(discriminant)))
+
+		dist_to_hit = np.where(~np.isnan(dist_to_hit),dist_to_hit,dist_to_hit_2)
 		dist_to_hit = np.where(np.isnan(dist_to_hit),dist_to_hit_2,dist_to_hit)
 
-		t = tile(np.where((discriminant > 0) * (dist_to_hit > t_min) * (dist_to_hit < t_max),
+		t = tile(np.where((discriminant > 0) * np.logical_and((dist_to_hit > t_min),(dist_to_hit < t_max)),
 						  dist_to_hit/(a * 2.0),-1.0))
 		p = r(t)
 		normal =((p - self.center)/self.radius)
-		rec = hit_record(t,p,normal)
+		rec = hit_record(t,p,normal,self.mat)
 		#print(np.any(rec.t > 0))
 		return np.any(rec.t > 0),rec 

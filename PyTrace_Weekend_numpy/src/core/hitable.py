@@ -3,10 +3,11 @@ from abc import ABC,abstractmethod
 from utils import * 
 from ray import * 
 import sys
+from material import * 
 MAX_FLOAT = sys.float_info.max
 
 class hit_record:
-	def __init__(self,t: np.ndarray,p: np.ndarray, normal: np.ndarray):
+	def __init__(self,t: np.ndarray,p: np.ndarray, normal: np.ndarray,mat):
 		'''
 		t: tile of distances along rays to tile hit (m x n x 1) (non-hits == -1.0)
 		p: location in worldspace of what rays in tile hit (m x n x 3)
@@ -15,6 +16,7 @@ class hit_record:
 		self.t = t
 		self.p = p
 		self.normal = normal
+		self.mat = mat
 
 class hitable(ABC):
 	def __init__(self):
