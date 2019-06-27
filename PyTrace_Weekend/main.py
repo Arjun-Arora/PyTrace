@@ -111,5 +111,6 @@ def main(filename: str = 'output',output_res: tuple = (200,100),num_samples= 100
     #f.close()
 
 if  __name__ == "__main__":
-    main("output",(200,100),100)
+    cProfile.run('main()')
+    #main("output",(200,100),100)
 
