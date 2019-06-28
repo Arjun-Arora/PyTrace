@@ -46,7 +46,7 @@ def unit_vector(vector: np.ndarray):
 	assert(vector.shape[-1]) == 3
 
 	#length = tile((vector ** 2).sum(axis=-1) ** 0.5)
-	length = np.linalg.norm(vector)
+	length = tile(np.linalg.norm(vector,axis=-1))
 	#print(vector.shape)
 	#length = np.repeat(length[:,:,np.newaxis],3,axis=2)
 	#print(length.shape)

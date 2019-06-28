@@ -16,8 +16,9 @@ def reflect(incoming_vector, normal):
 	return outgoing_vector
 
 
-def random_in_unit_sphere(arr: np.ndarray):
-	shape = arr.shape
+def random_in_unit_sphere(rand_shape: np.ndarray):
+	shape = rand_shape
+	#print(shape)
 	random_tile_in_sphere = np.random.randn(*shape)
 	# print(random_tile_in_sphere.shape)
 	# print(np.linalg.norm(random_tile_in_sphere,axis=2).shape)
@@ -28,7 +29,7 @@ class lambertian(material):
 	def __init__(self,albedo: vec3):
 		self.albedo = albedo
 	def scatter(self,r_in: ray, rec):
-		target = rec.p + rec.normal + random_in_unit_sphere(rec.normal)
+		target = rec.p + rec.normal + random_in_unit_sphere(rec.normal.shape)
 		#mask = ~np.all(rec.t == -1.0, axis=-1)
 		scattered = ray(rec.p,target - rec.p)
 		attenuation = self.albedo
@@ -43,6 +44,6 @@ class metal(material):
 		self.albedo = albedo
 	def scatter(self,r_in: ray, rec):
 		reflected = reflect(unit_vector(r_in.direction()),rec.normal)
-		scattered = ray(rec.p,reflected + self.fuzz * random_in_unit_sphere(reflected))
+		scattered = ray(rec.p,reflected + self.fuzz * random_in_unit_sphere(reflected.shape))
 		attenuation = self.albedo
 		return np.any(tiledot(scattered.direction(),rec.normal) > 0),(scattered,attenuation)

@@ -13,17 +13,8 @@ from mpl_toolkits.mplot3d import Axes3D
 
 MAX_FLOAT = sys.float_info.max
 
-def random_in_unit_sphere(arr: np.ndarray):
-	shape = arr.shape
-	random_tile_in_sphere = np.random.randn(*shape)
-	# print(random_tile_in_sphere.shape)
-	# print(np.linalg.norm(random_tile_in_sphere,axis=2).shape)
-	random_tile_in_sphere /= tile(np.linalg.norm(random_tile_in_sphere,axis=-1))
-	return  random_tile_in_sphere
 
-	
-
-def color(r: ray,world: list,tile_shape,depth = 0,max_depth = 4):
+def color(r: ray,world: list,tile_shape,depth = 0,max_depth = 2):
 	t = 0
 	target = 0
 	tile_x,tile_y = tile_shape
@@ -39,7 +30,7 @@ def color(r: ray,world: list,tile_shape,depth = 0,max_depth = 4):
 			#masks out all values that we didn't get hits for 
 				mask = ~np.all(rec.t == -1.0, axis=-1)
 				t += tile(mask) * (closest_hit == rec.t) *  rec.t
-				target = rec.p + rec.normal + tile(mask) * random_in_unit_sphere(rec.normal)
+				#target = rec.p + rec.normal + tile(mask) * random_in_unit_sphere(rec.normal.shape)
 				#mask out all color contributions that are calculated incorrectly using a mask
 				hit_color += 0.5 * tile(mask) * (closest_hit == rec.t) * attenuation *  color(scattered,world,tile_shape,depth+1,max_depth)
 
@@ -62,6 +53,7 @@ def color(r: ray,world: list,tile_shape,depth = 0,max_depth = 4):
 	unit_direction = unit_vector(r.direction())
 	#print((unit_direction ** 2).sum(axis=-1) ** 0.5)
 	t2 = tile(0.5 * (unit_direction[:,:,1] + 1.0))
+
 	sky_color = vec3(1.0,1.0,1.0) * (1.0 - t2) + vec3(0.5,0.7,1.0) * t2
 
 	return np.where(t > 0, hit_color,sky_color)
@@ -73,8 +65,8 @@ def main(nx: float = 200, ny: float = 100,ns: float = 100):
 	hit_object_list = []
 	hit_object_list.append(sphere(vec3(0,0,-1),0.5,lambertian(vec3(0.8,0.3,0.3))))
 	hit_object_list.append(sphere(vec3(0,-100.5,-1),100,lambertian(vec3(0.8,0.8,0.0))))	
-	hit_object_list.append(sphere(vec3(1,0,-1),0.5,metal(vec3(0.8,0.6,0.2))))
-	hit_object_list.append(sphere(vec3(-1,0,-1),0.5,metal(vec3(0.8,0.8,0.8))))
+	hit_object_list.append(sphere(vec3(1,0,-1),0.5,metal(vec3(0.8,0.6,0.2),1.0)))
+	hit_object_list.append(sphere(vec3(-1,0,-1),0.5,metal(vec3(0.8,0.8,0.8),0.3)))
 
 
 
@@ -97,7 +89,7 @@ def main(nx: float = 200, ny: float = 100,ns: float = 100):
 	# print(output.shape)
 	plt.imsave("output.png",np.rot90(output.astype(int)))
 if __name__ == "__main__": 
-	main(200,100,10)
+	main(200,100,100)
 	# X = random_in_unit_sphere(np.random.randn(200,100,3))
 	# fig = plt.figure()
 	# ax = fig.add_subplot(111)
