@@ -26,19 +26,22 @@ class sphere(hitable):
 		'''
 		oc = r.origin() - self.center
 		a = tile(tiledot(r.direction(),r.direction()))
-		b = tile(2.0 * tiledot(oc,r.direction()))
+		#b = tile(2.0 * tiledot(oc,r.direction()))
+		b = tile(tiledot(oc,r.direction()))
 		c =  tile(tiledot(oc,oc) - self.radius ** 2)
-		discriminant = tile(b ** 2 - 4 * a * c )
-		square = np.sqrt(np.maximum(0,discriminant))
-		dist_to_hit = (-b - square) / 2
-		dist_to_hit_2 = (-b + square) / 2
+		#discriminant = tile(b ** 2 - 4 * a * c )
+		discriminant = b * b - a * c 
 
-		distance = np.where( (dist_to_hit > 0) & (dist_to_hit < dist_to_hit_2), dist_to_hit,dist_to_hit_2)
-		hit = (discriminant > 0) & (distance > 0)
+		square = np.sqrt(np.maximum(0,discriminant))
+		dist_to_hit = (-b - square) / a
+		dist_to_hit_2 = (-b + square) / a
+
+		distance = np.where( (dist_to_hit > t_min) & (dist_to_hit < dist_to_hit_2), dist_to_hit,dist_to_hit_2)
+		hit = (discriminant > t_min) & (distance > t_min)
 
 		t = tile(np.where(hit,distance,-1.0))
 		p = r(t)
-		normal =((p - self.center)/self.radius)
+		normal = (p - self.center)/self.radius
 		rec = hit_record(t,p,normal,self.mat)
 		#print(np.any(rec.t > 0))
-		return np.any(rec.t > 0),rec 
+		return np.any(rec.t > t_min),rec 

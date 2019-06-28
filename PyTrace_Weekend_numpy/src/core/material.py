@@ -21,7 +21,7 @@ def random_in_unit_sphere(arr: np.ndarray):
 	random_tile_in_sphere = np.random.randn(*shape)
 	# print(random_tile_in_sphere.shape)
 	# print(np.linalg.norm(random_tile_in_sphere,axis=2).shape)
-	random_tile_in_sphere /= tile(np.linalg.norm(random_tile_in_sphere,axis=2))
+	random_tile_in_sphere /= tile(np.linalg.norm(random_tile_in_sphere,axis=-1))
 	return  random_tile_in_sphere
 
 class lambertian(material):
