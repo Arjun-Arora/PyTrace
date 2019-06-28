@@ -40,7 +40,7 @@ def color(r: ray,world: list,tile_shape,depth = 0,max_depth = 2):
 	# 		mask =  tile(~np.all(rec.t == -1.0, axis=-1))  & (closest_hit == rec.t)
 	# 		t += mask * rec.t
 	# 		#bug cannot be in random because incorrect coloring appears without random
-	# 		target = rec.p + rec.normal + random_in_unit_sphere(rec.normal)
+	# 		target = rec.p + rec.normal + random_in_unit_sphere(rec.normal.shape)
 	# 		hit_color += mask * 0.5 * color(ray(rec.p, target - rec.p),world,tile_shape,depth+1,max_depth)
 
 	# for record in rec_list:
@@ -56,8 +56,10 @@ def color(r: ray,world: list,tile_shape,depth = 0,max_depth = 2):
 	t2 = tile(0.5 * (unit_direction[:,:,1] + 1.0))
 
 	sky_color = vec3(1.0,1.0,1.0) * (1.0 - t2) + vec3(0.5,0.7,1.0) * t2
-
-	return np.where(t > 0.01, hit_color,sky_color)
+	# if depth == 0:
+	# 	hit_color =  np.sqrt(hit_color)
+	#hit_color =  np.sqrt(hit_color)
+	return np.where(t > 0.001,hit_color,sky_color)
 	#return sky_color
 
 def main(nx: float = 200, ny: float = 100,ns: float = 100):
@@ -67,8 +69,8 @@ def main(nx: float = 200, ny: float = 100,ns: float = 100):
 	hit_object_list = []
 	hit_object_list.append(sphere(vec3(0,0,-1),0.5,lambertian(vec3(0.8,0.3,0.3))))
 	hit_object_list.append(sphere(vec3(0,-100.5,-1),100,lambertian(vec3(0.8,0.8,0.0))))	
-	hit_object_list.append(sphere(vec3(1,0,-1),0.5,metal(vec3(0.8,0.6,0.2),0.0)))
-	hit_object_list.append(sphere(vec3(-1,0,-1),0.5,metal(vec3(0.8,0.8,0.8),0.0)))
+	hit_object_list.append(sphere(vec3(1,0,-1),0.5,metal(vec3(0.8,0.6,0.2),1)))
+	hit_object_list.append(sphere(vec3(-1,0,-1),0.5,metal(vec3(0.8,0.8,0.8),0.3)))
 
 
 
@@ -95,7 +97,7 @@ def main(nx: float = 200, ny: float = 100,ns: float = 100):
 	# print(output.shape)
 	plt.imsave("output.png",np.rot90(output.astype(int)))
 if __name__ == "__main__": 
-	main(200,100,10)
+	main(200,100,100)
 	# X = random_in_unit_sphere(np.random.randn(200,100,3))
 	# fig = plt.figure()
 	# ax = fig.add_subplot(111)
