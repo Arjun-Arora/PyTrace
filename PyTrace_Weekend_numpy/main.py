@@ -30,30 +30,27 @@ def color(r: ray,world: list,tile_shape,depth = 0,max_depth = 4):
 	hit_color = tile(np.zeros((tile_x,tile_y,3)))
 	hit_anything,rec_list,closest_hit = iterate_hit_list(r,tile(np.ones((tile_x,tile_y)) * 1e-9),
 										tile(np.ones((tile_x,tile_y)) * MAX_FLOAT),world)
-	# if hit_anything and depth <= max_depth:
-	# 	for rec in rec_list:
-	# 		scattered = None
-	# 		attenuation = None
-	# 		if_scatter,(scattered,attenuation) = rec.mat.scatter(r,rec)
-	# 		if if_scatter:
-	# 		#masks out all values that we didn't get hits for 
-	# 			mask = ~np.all(rec.t == -1.0, axis=-1)
-	# 			t += tile(mask) * (closest_hit == rec.t) *  rec.t
-	# 			#target = rec.p + rec.normal + tile(mask) * random_in_unit_sphere(rec.normal)
-	# 			#mask out all color contributions that are calculated incorrectly using a mask
-	# 			hit_color += 0.5 * tile(mask) * (closest_hit == rec.t) * attenuation *  color(scattered,world,tile_shape,depth+1,max_depth)
-
-
 	if hit_anything and depth <= max_depth:
 		for rec in rec_list:
-			mask =  tile(~np.all(rec.t == -1.0, axis=-1))  & (closest_hit == rec.t)
-			t += mask * rec.t
-			#bug cannot be in random because incorrect coloring appears without random
-			target = rec.p + rec.normal + random_in_unit_sphere(rec.normal)
-			hit_color += mask * 0.5 * color(ray(rec.p, target - rec.p),world,tile_shape,depth+1,max_depth)
-			# if depth == 0:
-			# 	plt.imshow(np.squeeze(t),cmap='gray')
-			# 	plt.show()
+			scattered = None
+			attenuation = None
+			if_scatter,(scattered,attenuation) = rec.mat.scatter(r,rec)
+			if if_scatter:
+			#masks out all values that we didn't get hits for 
+				mask = ~np.all(rec.t == -1.0, axis=-1)
+				t += tile(mask) * (closest_hit == rec.t) *  rec.t
+				target = rec.p + rec.normal + tile(mask) * random_in_unit_sphere(rec.normal)
+				#mask out all color contributions that are calculated incorrectly using a mask
+				hit_color += 0.5 * tile(mask) * (closest_hit == rec.t) * attenuation *  color(scattered,world,tile_shape,depth+1,max_depth)
+
+
+	# if hit_anything and depth <= max_depth:
+	# 	for rec in rec_list:
+	# 		mask =  tile(~np.all(rec.t == -1.0, axis=-1))  & (closest_hit == rec.t)
+	# 		t += mask * rec.t
+	# 		#bug cannot be in random because incorrect coloring appears without random
+	# 		target = rec.p + rec.normal + random_in_unit_sphere(rec.normal)
+	# 		hit_color += mask * 0.5 * color(ray(rec.p, target - rec.p),world,tile_shape,depth+1,max_depth)
 
 	# for record in rec_list:
 	# 	N = record.normal
@@ -63,22 +60,22 @@ def color(r: ray,world: list,tile_shape,depth = 0,max_depth = 4):
 
 	
 	unit_direction = unit_vector(r.direction())
+	#print((unit_direction ** 2).sum(axis=-1) ** 0.5)
 	t2 = tile(0.5 * (unit_direction[:,:,1] + 1.0))
 	sky_color = vec3(1.0,1.0,1.0) * (1.0 - t2) + vec3(0.5,0.7,1.0) * t2
 
-	return np.where(t > 0.0, hit_color,sky_color)
+	return np.where(t > 0, hit_color,sky_color)
 
 def main(nx: float = 200, ny: float = 100,ns: float = 100):
 	j = np.tile(np.arange(0,ny,1),reps=(nx,1))
 	i = np.tile(np.arange(0,nx,1),reps=(ny,1)).T
 
 	hit_object_list = []
-	hit_object_list.append(sphere(vec3(0,-100.5,-1),100,lambertian(vec3(0.8,0.8,0.0))))
 	hit_object_list.append(sphere(vec3(0,0,-1),0.5,lambertian(vec3(0.8,0.3,0.3))))
-	#it_object_list.append(sphere(vec3(-1,0,-1),0.5,metal(vec3(0.8,0.8,0.8))))
-	
+	hit_object_list.append(sphere(vec3(0,-100.5,-1),100,lambertian(vec3(0.8,0.8,0.0))))	
+	hit_object_list.append(sphere(vec3(1,0,-1),0.5,metal(vec3(0.8,0.6,0.2))))
+	hit_object_list.append(sphere(vec3(-1,0,-1),0.5,metal(vec3(0.8,0.8,0.8))))
 
-	#hit_object_list.append(sphere(vec3(1,0,-1),0.5,lambertian(vec3(0.8,0.6,0.2))))
 
 
 	col = np.zeros((nx,ny,3))
@@ -93,9 +90,9 @@ def main(nx: float = 200, ny: float = 100,ns: float = 100):
 			pbar.update(1)
 
 	col /= float(ns)
-	ir = 255.99 * col[:,:,0]
-	ig = 255.99 * col[:,:,1]
-	ib = 255.99 * col[:,:,2]
+	ir = 255.99 * np.sqrt(col[:,:,0])
+	ig = 255.99 * np.sqrt(col[:,:,1])
+	ib = 255.99 * np.sqrt(col[:,:,2])
 	output = np.dstack((ir,ig,ib))
 	# print(output.shape)
 	plt.imsave("output.png",np.rot90(output.astype(int)))
