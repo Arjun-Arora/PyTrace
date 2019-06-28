@@ -28,11 +28,11 @@ def color(r: ray,world: list,tile_shape,depth = 0,max_depth = 2):
 			if_scatter,(scattered,attenuation) = rec.mat.scatter(r,rec)
 			if if_scatter:
 			#masks out all values that we didn't get hits for 
-				mask = ~np.all(rec.t == -1.0, axis=-1)
-				t += tile(mask) * (closest_hit == rec.t) *  rec.t
+				mask =tile( ~np.all(rec.t == -1.0, axis=-1)) * (closest_hit == rec.t)
+				t += mask *  rec.t
 				#target = rec.p + rec.normal + tile(mask) * random_in_unit_sphere(rec.normal.shape)
 				#mask out all color contributions that are calculated incorrectly using a mask
-				hit_color += 0.5 * tile(mask) * (closest_hit == rec.t) * attenuation *  color(scattered,world,tile_shape,depth+1,max_depth)
+				hit_color += 0.5 * mask *  attenuation *  color(scattered,world,tile_shape,depth+1,max_depth)
 
 
 	# if hit_anything and depth <= max_depth:
@@ -51,12 +51,14 @@ def color(r: ray,world: list,tile_shape,depth = 0,max_depth = 2):
 
 	
 	unit_direction = unit_vector(r.direction())
+	#unit_direction = r.direction()
 	#print((unit_direction ** 2).sum(axis=-1) ** 0.5)
 	t2 = tile(0.5 * (unit_direction[:,:,1] + 1.0))
 
 	sky_color = vec3(1.0,1.0,1.0) * (1.0 - t2) + vec3(0.5,0.7,1.0) * t2
 
-	return np.where(t > 0, hit_color,sky_color)
+	return np.where(t > 0.01, hit_color,sky_color)
+	#return sky_color
 
 def main(nx: float = 200, ny: float = 100,ns: float = 100):
 	j = np.tile(np.arange(0,ny,1),reps=(nx,1))
@@ -65,8 +67,8 @@ def main(nx: float = 200, ny: float = 100,ns: float = 100):
 	hit_object_list = []
 	hit_object_list.append(sphere(vec3(0,0,-1),0.5,lambertian(vec3(0.8,0.3,0.3))))
 	hit_object_list.append(sphere(vec3(0,-100.5,-1),100,lambertian(vec3(0.8,0.8,0.0))))	
-	hit_object_list.append(sphere(vec3(1,0,-1),0.5,metal(vec3(0.8,0.6,0.2),1.0)))
-	hit_object_list.append(sphere(vec3(-1,0,-1),0.5,metal(vec3(0.8,0.8,0.8),0.3)))
+	hit_object_list.append(sphere(vec3(1,0,-1),0.5,metal(vec3(0.8,0.6,0.2),0.0)))
+	hit_object_list.append(sphere(vec3(-1,0,-1),0.5,metal(vec3(0.8,0.8,0.8),0.0)))
 
 
 
@@ -85,11 +87,15 @@ def main(nx: float = 200, ny: float = 100,ns: float = 100):
 	ir = 255.99 * np.sqrt(col[:,:,0])
 	ig = 255.99 * np.sqrt(col[:,:,1])
 	ib = 255.99 * np.sqrt(col[:,:,2])
+
+	# ir = 255.99 * col[:,:,0]
+	# ig = 255.99 * col[:,:,1]
+	# ib = 255.99 * col[:,:,2]
 	output = np.dstack((ir,ig,ib))
 	# print(output.shape)
 	plt.imsave("output.png",np.rot90(output.astype(int)))
 if __name__ == "__main__": 
-	main(200,100,100)
+	main(200,100,10)
 	# X = random_in_unit_sphere(np.random.randn(200,100,3))
 	# fig = plt.figure()
 	# ax = fig.add_subplot(111)
