@@ -59,7 +59,7 @@ W/ random scene:
 3 Large spheres + random spheres
 Standard implementation w/PyPy w/o cprofile
 avg: 1207.04it/s
-time: 00:00:
+time: 00:00:06
 
 
 W/ random scene:
