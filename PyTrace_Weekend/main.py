@@ -38,24 +38,24 @@ def color(r: ray, world: list,depth = 0,max_depth = 4):
 def random_scene():
     hit_object_list = []
     hit_object_list.append(sphere(vec3(0,-1000,0),1000,lambertian(vec3(0.5,0.5,0.5))))
-    # for a in range(-11,11,1):
-    #     for b in range(-11,11,1):
-    #         choose_mat = random.random()
-    #         center = vec3(a + 0.9 * random.random(),0.2, b + 0.9 * random.random())
-    #         if( (center-vec3(4,0.2,0)).length() > 0.9):
-    #             if(choose_mat < 0.8): #diffuse
-    #                 hit_object_list.append(sphere(center,0.2,
-    #                                         lambertian(vec3(random.random() * random.random(),
-    #                                                         random.random() * random.random(),
-    #                                                         random.random() * random.random()))))
-    #             elif(choose_mat < 0.95): #metal
-    #                 hit_object_list.append(sphere(center,0.2,
-    #                                               metal(vec3(0.5 * (1 + random.random()),
-    #                                                          0.5 * (1 + random.random()),
-    #                                                          0.5 * (1 + random.random())),
-    #                                                          0.5 * random.random())))
-    #             else:
-    #                 hit_object_list.append(sphere(center,0.2,dielectric(1.5)))
+    for a in range(-11,11,1):
+        for b in range(-11,11,1):
+            choose_mat = random.random()
+            center = vec3(a + 0.9 * random.random(),0.2, b + 0.9 * random.random())
+            if( (center-vec3(4,0.2,0)).length() > 0.9):
+                if(choose_mat < 0.8): #diffuse
+                    hit_object_list.append(sphere(center,0.2,
+                                            lambertian(vec3(random.random() * random.random(),
+                                                            random.random() * random.random(),
+                                                            random.random() * random.random()))))
+                elif(choose_mat < 0.95): #metal
+                    hit_object_list.append(sphere(center,0.2,
+                                                  metal(vec3(0.5 * (1 + random.random()),
+                                                             0.5 * (1 + random.random()),
+                                                             0.5 * (1 + random.random())),
+                                                             0.5 * random.random())))
+                else:
+                    hit_object_list.append(sphere(center,0.2,dielectric(1.5)))
 
     hit_object_list.append(sphere( vec3(0, 1, 0), 1.0, dielectric(1.5) ))
     hit_object_list.append(sphere( vec3(-4, 1, 0 ), 1.0, lambertian(vec3(0.4, 0.2, 0.1))))
@@ -73,13 +73,13 @@ def main(filename: str = 'output',output_res: tuple = (200,100),num_samples= 100
 
     hit_object_list = [] 
     R = math.cos(math.pi/4)
-    hit_object_list.append(sphere(vec3(-R,0,-1),R,lambertian(vec3(0, 0, 1))))
-    hit_object_list.append(sphere(vec3(R,0,-1),R,lambertian(vec3(1, 0, 0))))
-    hit_object_list.append(sphere(vec3(0,0,-1),0.5,lambertian(vec3(0.1,0.2,0.5))))
-    hit_object_list.append(sphere(vec3(0,-100.5,-1),100,lambertian(vec3(0.8,0.8,0.0))))
-    hit_object_list.append(sphere(vec3(1,0,-1),0.5,metal(vec3(0.8,0.6,0.2))))
-    hit_object_list.append(sphere(vec3(-1,0,-1),0.5,dielectric(1.5)))
-    hit_object_list.append(sphere(vec3(-1,0,-1),-0.45,dielectric(1.5)))
+    # hit_object_list.append(sphere(vec3(-R,0,-1),R,lambertian(vec3(0, 0, 1))))
+    # hit_object_list.append(sphere(vec3(R,0,-1),R,lambertian(vec3(1, 0, 0))))
+    # hit_object_list.append(sphere(vec3(0,0,-1),0.5,lambertian(vec3(0.1,0.2,0.5))))
+    # hit_object_list.append(sphere(vec3(0,-100.5,-1),100,lambertian(vec3(0.8,0.8,0.0))))
+    # hit_object_list.append(sphere(vec3(1,0,-1),0.5,metal(vec3(0.8,0.6,0.2))))
+    # hit_object_list.append(sphere(vec3(-1,0,-1),0.5,dielectric(1.5)))
+    # hit_object_list.append(sphere(vec3(-1,0,-1),-0.45,dielectric(1.5)))
     hit_object_list = random_scene()
     #print("hit this")
     lookfrom = vec3(13,2,3)
@@ -107,10 +107,10 @@ def main(filename: str = 'output',output_res: tuple = (200,100),num_samples= 100
                 output[i,j,:] = np.array([ir,ig,ib])
                 #f.write(str(ir)  +  " "  +  str(ig) +  " "  + str(ib) + "\n");
 
-    plt.imsave(filename + ".png",np.rot90(output).astype(int))
+    plt.imsave(filename + ".png",np.rot90(output).astype(np.uint8))
     #f.close()
 
 if  __name__ == "__main__":
-    cProfile.run('main()')
-    #main("output",(200,100),100)
+    #cProfile.run('main()')
+    main("random_spheres",(1200,800),256)
 
