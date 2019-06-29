@@ -10,9 +10,9 @@ class sphere(hitable):
 	def hit(self,r: ray , t_min: float,t_max: float):
 		rec = hit_record()
 		rec.mat = self.mat
-		oc = r.origin() - self.center
-		a = (r.direction()).dot(r.direction())
-		b = oc.dot(r.direction())
+		oc = r.origin - self.center
+		a = (r.direction).dot(r.direction)
+		b = oc.dot(r.direction)
 		c = oc.dot(oc) - (self.radius * self.radius)
 		discriminant = b * b - (a * c)
 		if (discriminant > 0 ): 

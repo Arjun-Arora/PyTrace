@@ -67,6 +67,6 @@ W/ random scene:
 200 x 100 
 3 Large spheres + random spheres
 Standard implementation w/PyPy w/ cprofile
-time: 237.142 seconds
+time: 151.181 seconds
 
 

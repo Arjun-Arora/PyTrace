@@ -75,10 +75,10 @@ class metal(material):
 			self.fuzz = 1.0
 		self.albedo = albedo
 	def scatter(self,r_in: ray, rec):
-		reflected = reflect(unit_vector(r_in.direction()),rec.normal)
+		reflected = reflect(unit_vector(r_in.direction),rec.normal)
 		scattered = ray(rec.p,reflected + self.fuzz * random_unit_sphere())
 		attenuation = self.albedo
-		return scattered.direction().dot(rec.normal) > 0,(scattered,attenuation)
+		return scattered.direction.dot(rec.normal) > 0,(scattered,attenuation)
 
 class dielectric(material):
 	def __init__(self,ri: float):
@@ -88,21 +88,21 @@ class dielectric(material):
 		ni_over_nt = None
 		refracted = None;
 		scattered = None;
-		reflected = reflect(r_in.direction(),rec.normal)
+		reflected = reflect(r_in.direction,rec.normal)
 		attenuation = vec3(1.0,1.0,1.0)
 		reflect_prob = None
 		cosine = None
 
-		if(r_in.direction().dot(rec.normal) > 0):
+		if(r_in.direction.dot(rec.normal) > 0):
 			outward_normal = -rec.normal
 			ni_over_nt = self.ref_idx
-			cosine = self.ref_idx * r_in.direction().dot(rec.normal) / r_in.direction().length()
+			cosine = self.ref_idx * r_in.direction.dot(rec.normal) / r_in.direction.length()
 		else:
 			outward_normal = rec.normal
 			ni_over_nt = 1.0/self.ref_idx
-			cosine = -r_in.direction().dot(rec.normal) / r_in.direction().length()
+			cosine = -r_in.direction.dot(rec.normal) / r_in.direction.length()
 
-		if_refract,refracted = refract(r_in.direction(),outward_normal,ni_over_nt)
+		if_refract,refracted = refract(r_in.direction,outward_normal,ni_over_nt)
 		if if_refract:
 			reflect_prob = schlick(cosine,self.ref_idx)
 			#scattered = ray(rec.p,refracted)

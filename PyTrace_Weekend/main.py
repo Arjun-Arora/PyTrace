@@ -29,7 +29,7 @@ def color(r: ray, world: list,depth = 0,max_depth = 4):
         else:
             return vec3(0.0,0.0,0.0)
     else:
-        unit_direction = unit_vector(r.direction())
+        unit_direction = unit_vector(r.direction)
         t = 0.5 * (unit_direction.y() + 1.0)
         return (1.0 -t ) * vec3(1.0,1.0,1.0) + t * vec3(0.5,0.7,1.0)
 

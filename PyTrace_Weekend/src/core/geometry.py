@@ -114,14 +114,14 @@ def unit_vector(vec: vec3):
 
 class ray:
     def __init__(self,a: vec3, b: vec3):
-        self.a = a
-        self.b = b
-    def origin(self):
-        return self.a
-    def direction(self):
-        return self.b
+        self.origin = a
+        self.direction = b
+    # def origin(self):
+    #     return self.a
+    # def direction(self):
+    #     return self.b
     def __call__(self,t):
-        return self.a + (t * self.b)
+        return self.origin + (t * self.direction)
 
 class rayTile: 
     def __init__(self,originTile: np.array,directionTile: np.array):
