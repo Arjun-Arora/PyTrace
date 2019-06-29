@@ -14,8 +14,7 @@ import matplotlib.pyplot as plt
 import cProfile
 MAX_FLOAT = sys.float_info.max
 
-
-
+random.seed(123)
 
 def color(r: ray, world: list,depth = 0,max_depth = 4):
     rec = hit_record()
@@ -89,7 +88,7 @@ def main(filename: str = 'output',output_res: tuple = (200,100),num_samples= 100
 
     cam = camera(lookfrom,lookat,vec3(0,1,0),20,float(nx)/float(ny),aperture,dist_to_focus)
     with tqdm(total = ny * nx) as pbar:
-        for j in range(ny-1 ,0,-1):
+        for j in range(ny-1 ,-1,-1):
             for i in range(0,nx):
                 col = vec3(0,0,0)
                 for s in range(0,num_samples):
@@ -111,6 +110,8 @@ def main(filename: str = 'output',output_res: tuple = (200,100),num_samples= 100
     #f.close()
 
 if  __name__ == "__main__":
-    #cProfile.run('main()')
-    main("random_spheres",(1200,800),256)
+    #cProfile.runctx('main()',None,("random_spheres",(200,100),64))
+    #main("./unit_tests/random_spheres_unit_test",(200,100),64)
+    main("./test",(32,32),64)
+
 

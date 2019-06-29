@@ -25,7 +25,7 @@ W/ current scene:
 1200 x 800 
 3 Large spheres
 Standard implementation w/PyPy
-avg:  4953.02it/s 
+avg:  4953.02 it/s 
 time: 00:03:13   
 
 W/ current scene: 
@@ -50,5 +50,13 @@ W/ random scene:
 1200 x 800 
 3 Large spheres + random spheres
 Standard implementation w/PyPy
-avg:  307.16it/s/s 
+avg:  307.16 it/s
 time: 00:52:01 
+
+W/ random scene:
+64 spp
+200 x 100 
+3 Large spheres + random spheres
+Standard implementation w/PyPy
+avg: 81.48 it/s
+time: 00:04:03
