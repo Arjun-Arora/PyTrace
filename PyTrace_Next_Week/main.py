@@ -18,7 +18,7 @@ random.seed(123)
 
 def color(r: ray, world: list,depth = 0,max_depth = 4):
     rec = hit_record()
-    hit_anything,rec = iterate_hit_list(r,0.001,MAX_FLOAT,world)
+    hit_anything,rec = hitable_list(world).hit(r,0.001,MAX_FLOAT)
     if (hit_anything):
         # print(rec.normal)
         scattered = ray(vec3(0,0,0),vec3(0,0,0),0.0)

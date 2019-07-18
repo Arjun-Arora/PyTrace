@@ -32,6 +32,14 @@ class sphere(hitable):
 				return (True, rec)
 		# print('got here with discriminant: {}'.format(discriminant))
 		return (False,rec)
+	def bounding_box(self, t0: float=None, t1: float=None):
+		box = aabb(self.center - vec3(self.radius,self.radius,self.radius),
+				  center + vec3(self.radius,self.radius,self.radius))
+		return (True,box);
+
+
+
+
 class moving_sphere(hitable):
 	def __init__(self,cen0: vec3, cen1: vec3, t0: float, t1: float, r: float, mat: material):
 		self.center0 = cen0
@@ -69,3 +77,7 @@ class moving_sphere(hitable):
 				rec.normal = (rec.p - self.curr_center(r.time))/self.radius
 				return (True, rec)
 		return (False,rec)
+	def bounding_box(self, t0: float, t1: float):
+		box = sorrounding_box(sphere(self.curr_center(t0),self.radius,self.mat).bounding_box()[1],
+			  				  sphere(self.curr_center(t1),self.radius,self.mat).bounding_box()[1])
+		return (True,box)
