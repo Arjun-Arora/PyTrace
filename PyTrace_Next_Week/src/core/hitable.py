@@ -4,6 +4,7 @@ from abc import ABC,abstractmethod
 from geometry import * 
 from material import *
 
+
 '''
 replacement for hit_record struct 
 '''
@@ -66,10 +67,10 @@ special class to store lists and the hit functionality.
 Here we just iterate through a list of hitable objects and record the closest hit for any ray
 
 '''
-def hitable_list(hitable):
+class hitable_list(hitable):
 	def __init__(self,object_list: list):
 		self.object_list = object_list
-	def hit(r:ray, t_min:float, t_max: float):
+	def hit(self,r:ray, t_min:float, t_max: float):
 		rec = hit_record()
 		hit_anything = False
 		closest_hit = t_max
@@ -101,5 +102,25 @@ def hitable_list(hitable):
 				return (False,box)
 		return (True,box)
 
+
+class bvh_node(hitable):
+	def __init__(self,object_list,time0: float,time1: float):
+		self.object_list = object_list
+		self.time0 = time0
+		self.time1 = time1
+		self.left = None
+		self.right = None 
+		self.box = None
+	def bounding_box(self):
+		return (True,self.box)
+	def hit(self,r:ray, t_min:float, t_max: float):
+		rec = hit_record()
+		if self.box.hit(r,t_min,t_max):
+			left_rec = hit_record()
+			right_rec = hit_record()
+			hit_left,left_rec = self.left.hit(r,t_min,t_max)
+			hit_right,right_rec = self.right.hit(r,t_min,t_max)
+		else:
+			return (False,rec)
 
 
