@@ -102,6 +102,23 @@ class hitable_list(hitable):
 				return (False,box)
 		return (True,box)
 
+#returns x,y or z value of hitable to sort bvh depending on axis 
+def box_x_val(a: hitable):
+	check,box = a.bounding_box(0,0)
+	if not check:
+		assert(False)
+	return box._min[0]
+def box_y_val(a: hitable):
+	check,box = a.bounding_box(0,0)
+	if not check:
+		assert(False)
+	return box._min[1]
+def box_z_val(a: hitable):
+	check,box = a.bounding_box(0,0)
+	if not check:
+		assert(False)
+	return box._min[2]
+
 
 class bvh_node(hitable):
 	def __init__(self,object_list,time0: float,time1: float):
@@ -111,6 +128,32 @@ class bvh_node(hitable):
 		self.left = None
 		self.right = None 
 		self.box = None
+
+		axis = int(random.random() * 3)
+		if(axis == 0):
+			sorted(self.object_list,key = box_x_val)
+		elif axis == 1: 
+			sorted(self.object_list,key = box_y_val)
+		else:
+			sorted(object_list,key = box_z_val)
+		if len(self.object_list) == 1:
+			self.left = self.object_list[0]
+			self.right = self.left
+		elif len(self.object_list) == 2: 
+			self.left = self.object_list[0]
+			self.right = self.object_list[1]
+		else: 
+			n = len(self.object_list)
+			split = int(n/2)
+			self.left = bvh_node(self.object_list[:split],self.time0,self.time1)
+			self.right =bvh_node(self.object_list[split: n - split],self.time0,self.time1)
+
+		left_check,left_box = self.left.bounding_box()
+		right_check,right_box = self.right.bounding_box()
+		if not left_check or not right_check:
+			assert(False, "missing bounding box in bvh node construction")
+		self.box = sorrounding_box(left_box,right_box)
+		
 	def bounding_box(self):
 		return (True,self.box)
 	def hit(self,r:ray, t_min:float, t_max: float):
@@ -120,6 +163,18 @@ class bvh_node(hitable):
 			right_rec = hit_record()
 			hit_left,left_rec = self.left.hit(r,t_min,t_max)
 			hit_right,right_rec = self.right.hit(r,t_min,t_max)
+			if(hit_left and hit_right):
+				if(left_rec.t < right_rec.t):
+					rec = left_rec
+				else:
+					rec = right_rec
+				return (True,rec)
+			elif(hit_left):
+				return (True,left_rec)
+			elif(hit_right):
+				return (True,right_rec)
+			else:
+				return(False,rec)
 		else:
 			return (False,rec)
 
