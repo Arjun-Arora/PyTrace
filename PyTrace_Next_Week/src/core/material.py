@@ -2,8 +2,10 @@ import sys
 from math import * 
 from hitable import * 
 from geometry import *
+from texture import * 
 from abc import ABC,abstractmethod
 import random
+
 
 '''
 reflectivity polynomial approximation
@@ -59,12 +61,12 @@ class material(ABC):
 		pass
 
 class lambertian(material):
-	def __init__(self,albedo: vec3):
+	def __init__(self,albedo: texture):
 		self.albedo = albedo
 	def scatter(self,r_in: ray, rec):
 		target = rec.p + rec.normal + random_unit_sphere()
 		scattered = ray(rec.p,target - rec.p,r_in.time)
-		attenuation = self.albedo
+		attenuation = self.albedo.value(0,0,rec.p)
 		return True,(scattered,attenuation)
 
 class metal(material):
