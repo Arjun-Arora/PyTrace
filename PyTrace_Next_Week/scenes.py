@@ -50,4 +50,13 @@ def two_spheres():
     hit_object_list += [bottom_sphere,top_sphere]
     return hit_object_list
 
+def two_perlin_spheres():
+    hit_object_list = []
+    pertext = noise_texture()
+    bottom_sphere = sphere(vec3(0,-1000,0),1000,lambertian(pertext))
+    top_sphere = sphere(vec3(0,2,0),2,lambertian(pertext))
+    hit_object_list += [bottom_sphere,top_sphere]
+
+    return hit_object_list
+
 

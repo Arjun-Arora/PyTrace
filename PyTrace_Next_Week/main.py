@@ -50,7 +50,8 @@ def main(filename: str = 'output',output_res: tuple = (200,100),num_samples= 100
     R = math.cos(math.pi/4)
 
     #hit_object_list = random_scene()
-    hit_object_list = two_spheres()
+    #hit_object_list = two_spheres()
+    hit_object_list = two_perlin_spheres()
     #print("hit this")
     lookfrom = vec3(13,2,3)
     lookat = vec3(0,0,0)
@@ -83,6 +84,6 @@ def main(filename: str = 'output',output_res: tuple = (200,100),num_samples= 100
 if  __name__ == "__main__":
     #cProfile.runctx('main()',None,("random_spheres",(200,100),64))
     #main("./unit_tests/random_spheres_unit_test",(200,100),64)
-    main("./test",output_res = (400,300),num_samples = 64)
+    main("./test",output_res = (400,300),num_samples = 16)
 
 
