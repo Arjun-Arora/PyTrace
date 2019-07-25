@@ -73,6 +73,16 @@ def earth_sphere():
 
     return hit_object_list
 
+def simple_light():
+    hit_object_list = []
+    pertext = noise_texture(4)
+    hit_object_list.append(sphere(vec3(0,-1000,0),1000,lambertian(pertext)))
+    hit_object_list.append(sphere(vec3(0,2,0),2,lambertian(pertext)))
+    light_color = constant_texture(vec3(4.0,4.0,4.0))
+    hit_object_list.append(sphere(vec3(0,7,0),2,diffuse_light(light_color)))
+    hit_object_list.append(xy_rect(3,5,1,3,-2,diffuse_light(light_color)))
+
+    return hit_object_list
 
 
 

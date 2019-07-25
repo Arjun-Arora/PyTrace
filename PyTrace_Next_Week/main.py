@@ -29,15 +29,18 @@ def color(r: ray, world: list,depth = 0,max_depth = 4):
         if_scatter,(scattered,attenuation) = rec.mat.scatter(r,rec)
         emitted = rec.mat.emitted(rec.u,rec.v,rec.p)
         if (depth < max_depth and if_scatter):
+            #print(color( scattered,world,depth + 1,max_depth))
             return emitted + attenuation * color( scattered,world,depth + 1,max_depth)
         else:
             return emitted
     else:
         #placeholder until fully implemented lights
-        return vec3(1,1,1)
+        # return vec3(1,1,1)
         # unit_direction = unit_vector(r.direction)
         # t = 0.5 * (unit_direction.y() + 1.0)
         # return (1.0 -t ) * vec3(1.0,1.0,1.0) + t * vec3(0.5,0.7,1.0)
+
+        return vec3(0,0,0)
 
 
 def main(filename: str = 'output',output_res: tuple = (200,100),num_samples= 100):
@@ -55,10 +58,13 @@ def main(filename: str = 'output',output_res: tuple = (200,100),num_samples= 100
     #hit_object_list = random_scene()
     #hit_object_list = two_spheres()
     #hit_object_list = two_perlin_spheres()
-    hit_object_list = earth_sphere()
+    #hit_object_list = earth_sphere()
+    hit_object_list = simple_light()
     #print("hit this")
-    lookfrom = vec3(13,2,3)
-    lookat = vec3(0,0,0)
+    #lookfrom = vec3(13,2,3)
+    lookfrom = vec3(13,2,10)
+    #lookat = vec3(0,0,0)
+    lookat = vec3(0,2,0)
     dist_to_focus = 10
     aperture = 0.1
 

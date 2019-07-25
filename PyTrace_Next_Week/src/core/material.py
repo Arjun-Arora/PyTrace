@@ -132,15 +132,17 @@ light material
 '''
 class diffuse_light(material): 
 	def __init__(self,tex: texture):
-		self.emit = texture
+		self.emit = tex
+
 	def scatter(self,r_in: ray, rec):
 		'''
 		diffuse light do not reflect, simply emit
 		'''
-		return False,(None,None)
+		return False,(0,0)
 	def emitted(self,u: float, v: float, p: vec3 ):
 		'''
 		return color associated w/ texture
+
 		'''
 		return self.emit.value(u,v,p)
 
