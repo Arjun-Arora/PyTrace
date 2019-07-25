@@ -84,5 +84,24 @@ def simple_light():
 
     return hit_object_list
 
+def cornell_box():
+    hit_object_list = []
+    mat_red = lambertian(constant_texture(vec3(0.65,0.05,0.05)))
+    mat_white = lambertian(constant_texture(vec3(0.73,0.73,0.73)))
+    mat_green = lambertian(constant_texture(vec3(0.12,0.45,0.15)))
+    mat_light = diffuse_light(constant_texture(vec3(15,15,15)))
+
+    hit_object_list.append(flip_normals(yz_rect(0,555,0,555,555,mat_green)))
+
+    hit_object_list.append(yz_rect(0,555,0,555,0,mat_red))
+    hit_object_list.append(xz_rect(213,343,227,332,554,mat_light))
+
+    hit_object_list.append(flip_normals(xz_rect(0,555,0,555,555,mat_white)))
+
+    hit_object_list.append(xz_rect(0,555,0,555,0,mat_white))
+    
+    hit_object_list.append(flip_normals(xy_rect(0,555,0,555,555,mat_white)))
+    return hit_object_list
+
 
 

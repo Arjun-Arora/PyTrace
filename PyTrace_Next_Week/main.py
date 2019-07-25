@@ -59,16 +59,26 @@ def main(filename: str = 'output',output_res: tuple = (200,100),num_samples= 100
     #hit_object_list = two_spheres()
     #hit_object_list = two_perlin_spheres()
     #hit_object_list = earth_sphere()
-    hit_object_list = simple_light()
-    #print("hit this")
-    #lookfrom = vec3(13,2,3)
-    lookfrom = vec3(13,2,10)
-    #lookat = vec3(0,0,0)
-    lookat = vec3(0,2,0)
-    dist_to_focus = 10
-    aperture = 0.1
+    #hit_object_list = simple_light()
+    hit_object_list = cornell_box()
 
-    cam = camera(lookfrom,lookat,vec3(0,1,0),20,float(nx)/float(ny),aperture,dist_to_focus,0.0,1.0)
+    #lookfrom = vec3(13,2,3)
+    #lookat = vec3(0,0,0)
+
+    #lookfrom = vec3(13,2,10)
+    #lookat = vec3(0,2,0)
+
+    # dist_to_focus = 10
+    # aperture = 0.1
+    #vfov = 20
+
+    lookfrom = vec3(278,278,-800)
+    lookat = vec3(278,278,0)
+    dist_to_focus = 10
+    aperture = 0 
+    vfov = 40
+
+    cam = camera(lookfrom,lookat,vec3(0,1,0),vfov,float(nx)/float(ny),aperture,dist_to_focus,0.0,1.0)
     with tqdm(total = ny * nx) as pbar:
         for j in range(ny-1 ,-1,-1):
             for i in range(0,nx):
@@ -94,6 +104,6 @@ def main(filename: str = 'output',output_res: tuple = (200,100),num_samples= 100
 if  __name__ == "__main__":
     #cProfile.runctx('main()',None,("random_spheres",(200,100),64))
     #main("./unit_tests/random_spheres_unit_test",(200,100),64)
-    main("./test",output_res = (400,300),num_samples = 256)
+    main("./test",output_res = (400,300),num_samples = 1024)
 
 

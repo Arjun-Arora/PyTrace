@@ -123,7 +123,9 @@ def box_z_val(a: hitable):
 		assert(False)
 	return box._min[2]
 
-
+'''
+bounding volume hierarchy node 
+'''
 class bvh_node(hitable):
 	def __init__(self,object_list,time0: float,time1: float):
 		self.object_list = object_list
@@ -182,4 +184,19 @@ class bvh_node(hitable):
 		else:
 			return (False,rec)
 
+'''
+flip normal hitable
+'''
+class flip_normals(hitable):
+	def __init__(self,p: hitable):
+		self.p = p 
+	def hit(self,r:ray, t_min:float, t_max: float):
+		is_hit,rec = self.p.hit(r,t_min,t_max)
+		if is_hit:
+			rec.normal = -rec.normal
+			return(True, rec)
+		else:
+			return (False,rec)
+	def bounding_box(self, t0: float, t1: float):
+		return self.p.bounding_box(t0,t1)
 
