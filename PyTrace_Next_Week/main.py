@@ -27,14 +27,17 @@ def color(r: ray, world: list,depth = 0,max_depth = 4):
         scattered = ray(vec3(0,0,0),vec3(0,0,0),0.0)
         attenuation = vec3(0,0,0)
         if_scatter,(scattered,attenuation) = rec.mat.scatter(r,rec)
+        emitted = rec.mat.emitted(rec.u,rec.v,rec.p)
         if (depth < max_depth and if_scatter):
-            return attenuation * color( scattered,world,depth + 1,max_depth)
+            return emitted + attenuation * color( scattered,world,depth + 1,max_depth)
         else:
-            return vec3(0.0,0.0,0.0)
+            return emitted
     else:
-        unit_direction = unit_vector(r.direction)
-        t = 0.5 * (unit_direction.y() + 1.0)
-        return (1.0 -t ) * vec3(1.0,1.0,1.0) + t * vec3(0.5,0.7,1.0)
+        #placeholder until fully implemented lights
+        return vec3(1,1,1)
+        # unit_direction = unit_vector(r.direction)
+        # t = 0.5 * (unit_direction.y() + 1.0)
+        # return (1.0 -t ) * vec3(1.0,1.0,1.0) + t * vec3(0.5,0.7,1.0)
 
 
 def main(filename: str = 'output',output_res: tuple = (200,100),num_samples= 100):

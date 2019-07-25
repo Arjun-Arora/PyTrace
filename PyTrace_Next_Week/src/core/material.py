@@ -59,6 +59,12 @@ class material(ABC):
 	'''
 	def scatter(r: ray, rec):
 		pass
+	'''
+	base function so non-emissive materials don't emit anything
+	'''
+	def emitted(self,u: float, v: float, p: vec3):
+		return vec3(0,0,0)
+
 
 class lambertian(material):
 	def __init__(self,albedo: texture):
@@ -119,11 +125,24 @@ class dielectric(material):
 
 		return True,(scattered,attenuation)
 
+'''
 
+light material 
 
-
-
-
+'''
+class diffuse_light(material): 
+	def __init__(self,tex: texture):
+		self.emit = texture
+	def scatter(self,r_in: ray, rec):
+		'''
+		diffuse light do not reflect, simply emit
+		'''
+		return False,(None,None)
+	def emitted(self,u: float, v: float, p: vec3 ):
+		'''
+		return color associated w/ texture
+		'''
+		return self.emit.value(u,v,p)
 
 
 
