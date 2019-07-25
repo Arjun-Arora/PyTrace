@@ -9,11 +9,15 @@ from material import *
 replacement for hit_record struct 
 '''
 class hit_record:
-	def __init__(self,t: float = 0.0,p_vec: vec3 = vec3(0,0,0),normal: vec3 = vec3(0,0,0),mat = None):
+	def __init__(self,t: float = 0.0,p_vec: vec3 = vec3(0,0,0),
+				     normal: vec3 = vec3(0,0,0),mat = None,
+				     u: float = 0.0,v:float = 0.0):
 		self.t = t
 		self.p = p_vec
 		self.normal = normal
 		self.mat = mat
+		self.u = u
+		self.v = v 
 class hitable(ABC):
 	def __init__(self,r: ray,t_min: float ,t_max: float):
 		self.r = r

@@ -66,7 +66,7 @@ class lambertian(material):
 	def scatter(self,r_in: ray, rec):
 		target = rec.p + rec.normal + random_unit_sphere()
 		scattered = ray(rec.p,target - rec.p,r_in.time)
-		attenuation = self.albedo.value(0,0,rec.p)
+		attenuation = self.albedo.value(rec.u,rec.v,rec.p)
 		return True,(scattered,attenuation)
 
 class metal(material):

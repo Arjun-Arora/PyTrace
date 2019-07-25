@@ -2,6 +2,14 @@ import sys
 from hitable import * 
 import math
 from geometry import *
+
+def get_sphere_uv(p: vec3):
+	phi = atan2(p[2],p[0])
+	theta = asin(p[1])
+	u = 1 - (phi + pi)/ (2 * pi )
+	v = (theta + pi / 2) / ( pi )
+	return u,v
+	
 class sphere(hitable):
 	def __init__(self,center: vec3,radius: float,mat: material):
 		self.center = center
@@ -21,6 +29,7 @@ class sphere(hitable):
 				#print('hit this')
 				rec.t = temp
 				rec.p = r(rec.t)
+				rec.u,rec.v = get_sphere_uv((rec.p-self.center)/self.radius)
 				rec.normal = (rec.p - self.center)/self.radius
 				return (True, rec)
 			temp = (-b + math.sqrt(b * b - a * c))/a
@@ -28,6 +37,7 @@ class sphere(hitable):
 				#print('hit this')
 				rec.t = temp
 				rec.p = r(rec.t)
+				rec.u,rec.v = get_sphere_uv((rec.p-self.center)/self.radius)
 				rec.normal = (rec.p - self.center)/self.radius
 				return (True, rec)
 		# print('got here with discriminant: {}'.format(discriminant))

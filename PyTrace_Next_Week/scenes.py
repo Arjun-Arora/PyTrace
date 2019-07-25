@@ -2,6 +2,8 @@ import sys
 import os
 import math
 import random
+import matplotlib.pyplot as plt
+import numpy as np 
 sys.path.append("./src/core/")
 from geometry import * 
 from hitable import * 
@@ -58,5 +60,19 @@ def two_perlin_spheres():
     hit_object_list += [bottom_sphere,top_sphere]
 
     return hit_object_list
+
+def earth_sphere():
+    hit_object_list = []
+    earth_img = plt.imread("EarthMap.png")
+    earth_img = np.swapaxes(earth_img,0,1)
+    nx,ny,_ = earth_img.shape
+    mat = lambertian(image_texture(earth_img,nx,ny))
+    #other_mat = lambertian(constant_texture(vec3(0.2,0.3,0.1)))
+    new_sphere = sphere(vec3(0,0,0),2.0,mat)
+    hit_object_list += [new_sphere]
+
+    return hit_object_list
+
+
 
 
