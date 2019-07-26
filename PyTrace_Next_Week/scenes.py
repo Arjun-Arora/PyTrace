@@ -97,8 +97,12 @@ def cornell_box():
     hit_object_list.append(flip_normals(xz_rect(0,555,0,555,555,mat_white)))
     hit_object_list.append(xz_rect(0,555,0,555,0,mat_white))
     hit_object_list.append(flip_normals(xy_rect(0,555,0,555,555,mat_white)))
-    hit_object_list.append(box(vec3(130,0,65),vec3(295,165,230),mat_white))
-    hit_object_list.append(box(vec3(265,0,295),vec3(430,330,460),mat_white))
+    # hit_object_list.append(box(vec3(130,0,65),vec3(295,165,230),mat_white))
+    # hit_object_list.append(box(vec3(265,0,295),vec3(430,330,460),mat_white))
+    # hit_object_list.append(translate(box(vec3(0, 0, 0), vec3(165, 165, 165), mat_white), vec3(130,0,65)))
+    # hit_object_list.append(translate(box(vec3(0, 0, 0), vec3(165, 330, 165), mat_white), vec3(265,0,295)))
+    hit_object_list.append(translate(rotate_y(box(vec3(0, 0, 0), vec3(165, 165, 165), mat_white),-18), vec3(130,0,65)))
+    hit_object_list.append(translate(rotate_y(box(vec3(0, 0, 0), vec3(165, 330, 165), mat_white),15), vec3(265,0,295)))
 
     return hit_object_list
 

@@ -3,15 +3,17 @@ import math
 from abc import ABC,abstractmethod
 from geometry import * 
 from material import *
-
+from math import pi,sin,cos
+FLT_MAX = sys.float_info.max
+import copy 
 
 '''
 replacement for hit_record struct 
 '''
 class hit_record:
 	def __init__(self,t: float = 0.0,p_vec: vec3 = vec3(0,0,0),
-				     normal: vec3 = vec3(0,0,0),mat = None,
-				     u: float = 0.0,v:float = 0.0):
+					 normal: vec3 = vec3(0,0,0),mat = None,
+					 u: float = 0.0,v:float = 0.0):
 		self.t = t
 		self.p = p_vec
 		self.normal = normal
@@ -54,11 +56,11 @@ class aabb:
 
 def sorrounding_box(box0: aabb, box1: aabb): 
 	 small = vec3(ffmin(box0._min[0],box1._min[0]),
-	 			  ffmin(box0._min[1],box1._min[1]),
-	 			  ffmin(box0._min[2],box1._min[2]))
+				  ffmin(box0._min[1],box1._min[1]),
+				  ffmin(box0._min[2],box1._min[2]))
 	 big = vec3(ffmax(box0._max[0],box1._max[0]),
-	 			ffmax(box0._max[1],box1._max[1]),
-	 			ffmax(box0._max[2],box1._max[2]))
+				ffmax(box0._max[1],box1._max[1]),
+				ffmax(box0._max[2],box1._max[2]))
 	 return aabb(small,big)
 
 
@@ -184,6 +186,12 @@ class bvh_node(hitable):
 		else:
 			return (False,rec)
 
+####
+'''
+hitable containers
+'''
+####
+
 '''
 flip normal hitable
 '''
@@ -199,4 +207,84 @@ class flip_normals(hitable):
 			return (False,rec)
 	def bounding_box(self, t0: float, t1: float):
 		return self.p.bounding_box(t0,t1)
+
+class translate(hitable):
+	def __init__(self,p: hitable,offset: vec3):
+		self.offset = offset
+		self.p = p 
+	def hit(self,r:ray, t_min:float, t_max: float):
+		moved_r = ray(r.origin - self.offset,r.direction,r.time)
+		#print(self.p)
+		is_hit,rec = self.p.hit(moved_r,t_min,t_max)
+		if is_hit:
+			rec.p += self.offset
+			return (True,rec)
+		else:
+			return (False,rec)
+	def bounding_box(t0: float, t1: float):
+		box = None
+		found_box,box = self.p.bounding_box(t0,t1)
+		if found_box:
+			box = aabb(box._min + self.offset, box._max + self.offset)
+			return (True,box)
+		else: 
+			return (False,box)
+
+class rotate_y(hitable):
+	def __init__(self,p: hitable, angle: float):  
+		self.radians = (pi / 180.0) * angle;
+		self.sin_theta = sin(self.radians)
+		self.cos_theta = cos(self.radians)
+		self.p = p
+		self.hasbox,self.bbox = self.p.bounding_box(0, 1)
+		self._min_ = vec3(FLT_MAX, FLT_MAX, FLT_MAX)
+		self._max_ = vec3(-FLT_MAX, -FLT_MAX, -FLT_MAX)
+		for i in range(2):
+			for j in range(2):
+				for k in range(2):
+					x = i*self.bbox._max[0] + (1-i)*self.bbox._min[0]
+					y = j*self.bbox._max[1] + (1-j)*self.bbox._min[1]
+					z = k*self.bbox._max[2] + (1-k)*self.bbox._min[2]
+					newx = self.cos_theta*x + self.sin_theta*z;
+					newz = -self.sin_theta*x + self.cos_theta*z;
+					tester = vec3(newx, y, newz);
+					for c in range(3):
+						if ( tester[c] > self._max_[c] ):
+							self._max_[c] = tester[c]
+						if ( tester[c] < self._min_[c] ):
+							self._min_[c] = tester[c]
+		self.bbox = aabb(self._min_, self._max_)
+	def hit(self,r:ray, t_min:float, t_max: float):
+		new_origin_x = self.cos_theta*r.origin[0] - self.sin_theta*r.origin[2]
+		# this ensures that new_origin_y populates a new value with no reference to origin r.origin[1]
+		# this ensures that original ray data is not polluted when we stick it into new ray
+		# we do this instead copy or deepcopy because both of those commands are incredibly expensive
+		# and we only care about affecting numerical primitives here, honestly python needs a better way to do this...
+		new_origin_y = 1.0 * r.origin[1]
+		new_origin_z = self.sin_theta*r.origin[0] + self.cos_theta*r.origin[2]
+		new_direction_x  = self.cos_theta*r.direction[0] - self.sin_theta*r.direction[2]
+		new_direction_y = 1.0 * r.direction[1]
+		new_direction_z = self.sin_theta*r.direction[0] + self.cos_theta*r.direction[2];
+		new_time = r.time * 1.0
+
+		rotated_r = ray(vec3(new_origin_x,new_origin_y,new_origin_z),
+						vec3(new_direction_x,new_direction_y,new_direction_z),
+						new_time) 
+		is_hit,rec = self.p.hit(rotated_r, t_min, t_max)
+		if (is_hit):
+			p_x = self.cos_theta*rec.p[0] + self.sin_theta*rec.p[2];
+			p_z = -self.sin_theta*rec.p[0] + self.cos_theta*rec.p[2];
+			normal_x = self.cos_theta*rec.normal[0] + self.sin_theta*rec.normal[2];
+			normal_z = -self.sin_theta*rec.normal[0] + self.cos_theta*rec.normal[2];
+			rec.p[0],rec.p[2] =p_x,p_z;
+			rec.normal[0],rec.normal[2] = normal_x,normal_z;
+			return (True,rec);
+		else: 
+			return (False,rec);
+		def bounding_box(self,t0: float, t1: float):
+			return (self.hasbox,self.bbox)
+
+
+
+
 

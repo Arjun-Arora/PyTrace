@@ -207,6 +207,9 @@ class box(hitable):
 		self.hit_list = hitable_list(hit_object_list)
 	def hit(self,r: ray , t0: float,t1: float):
 		return self.hit_list.hit(r,t0,t1)
+	def bounding_box(self,t0: float, t1: float):
+		box = aabb(self.pmin,self.pmax)
+		return (True,box)
 
 
 
