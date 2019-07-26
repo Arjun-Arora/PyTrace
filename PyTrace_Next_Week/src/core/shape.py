@@ -186,3 +186,49 @@ class yz_rect(hitable):
 	def bounding_box(self,t0: float, t1: float ): 
 		box = aabb(vec3(self.k-0.0001,self.y0,self.z0),vec3(self.k + 0.0001,self.y1,self.z1))
 		return (True,box)
+
+
+'''
+box shape, constructed from a series of rects as well as their flipped normal counterparts
+'''
+
+class box(hitable):
+	def __init__(self,p0: vec3, p1: vec3, mat: material):
+		self.pmin = p0
+		self.pmax = p1
+		self.mat = mat
+		hit_object_list = []
+		hit_object_list += [xy_rect(p0[0],p1[0],p0[1],p1[1],p1[2],mat)]
+		hit_object_list += [flip_normals(xy_rect(p0[0],p1[0],p0[1],p1[1],p0[2],mat))]
+		hit_object_list += [xz_rect(p0[0],p1[0],p0[2],p1[2],p1[1],mat)]
+		hit_object_list += [flip_normals(xz_rect(p0[0],p1[0],p0[2],p1[2],p0[1],mat))]
+		hit_object_list += [yz_rect(p0[1],p1[1],p0[2],p1[2],p1[0],mat)]
+		hit_object_list += [flip_normals(yz_rect(p0[1],p1[1],p0[2],p1[2],p0[0],mat))]
+		self.hit_list = hitable_list(hit_object_list)
+	def hit(self,r: ray , t0: float,t1: float):
+		return self.hit_list.hit(r,t0,t1)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

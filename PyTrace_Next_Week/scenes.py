@@ -92,15 +92,14 @@ def cornell_box():
     mat_light = diffuse_light(constant_texture(vec3(15,15,15)))
 
     hit_object_list.append(flip_normals(yz_rect(0,555,0,555,555,mat_green)))
-
     hit_object_list.append(yz_rect(0,555,0,555,0,mat_red))
     hit_object_list.append(xz_rect(213,343,227,332,554,mat_light))
-
     hit_object_list.append(flip_normals(xz_rect(0,555,0,555,555,mat_white)))
-
     hit_object_list.append(xz_rect(0,555,0,555,0,mat_white))
-    
     hit_object_list.append(flip_normals(xy_rect(0,555,0,555,555,mat_white)))
+    hit_object_list.append(box(vec3(130,0,65),vec3(295,165,230),mat_white))
+    hit_object_list.append(box(vec3(265,0,295),vec3(430,330,460),mat_white))
+
     return hit_object_list
 
 
