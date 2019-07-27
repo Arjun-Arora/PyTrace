@@ -60,7 +60,8 @@ def main(filename: str = 'output',output_res: tuple = (200,100),num_samples= 100
     #hit_object_list = two_perlin_spheres()
     #hit_object_list = earth_sphere()
     #hit_object_list = simple_light()
-    hit_object_list = cornell_box()
+    #hit_object_list = cornell_box()
+    hit_object_list = cornell_smoke()
 
     #lookfrom = vec3(13,2,3)
     #lookat = vec3(0,0,0)
@@ -95,7 +96,7 @@ def main(filename: str = 'output',output_res: tuple = (200,100),num_samples= 100
                 ir = int(255.99 * col.x0);
                 ig = int(255.99 * col.x1);
                 ib = int(255.99 * col.x2);
-                output[i,j,:] = np.array([ir,ig,ib])
+                output[i,j,:] = np.array([ir,ig,ib]).clip(0,255)
                 #f.write(str(ir)  +  " "  +  str(ig) +  " "  + str(ib) + "\n");
 
     plt.imsave(filename + ".png",np.rot90(output).astype(np.uint8))

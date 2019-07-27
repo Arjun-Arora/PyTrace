@@ -147,6 +147,20 @@ class diffuse_light(material):
 		return self.emit.value(u,v,p)
 
 
+'''
+
+isotropic function
+
+'''
+
+class isotropic(material):
+	def __init__(self,a: texture):
+		self.albedo = a 
+	def scatter(self,r_in: ray, rec):
+		scattered = ray(rec.p,random_unit_sphere(),r_in.time)
+		attenuation = self.albedo.value(rec.u,rec.v,rec.p)
+		return True,(scattered,attenuation)
+
 
 
 

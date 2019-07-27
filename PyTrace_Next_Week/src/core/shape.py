@@ -2,6 +2,11 @@ import sys
 from hitable import * 
 import math
 from geometry import *
+from material import * 
+FLT_MAX = sys.float_info.max
+import random
+
+
 
 def get_sphere_uv(p: vec3):
 	phi = atan2(p[2],p[0])
@@ -210,6 +215,35 @@ class box(hitable):
 	def bounding_box(self,t0: float, t1: float):
 		box = aabb(self.pmin,self.pmax)
 		return (True,box)
+
+class constant_medium(hitable):
+	def __init__(self,b: hitable, d: float, a: texture):
+		self.boundary = b
+		self.density  = d 
+		self.phase_function = isotropic(a)
+	def hit(self, r: ray, t_min: float, t_max: float):
+		return_rec = hit_record()
+		is_hit1,rec1 = self.boundary.hit(r,-FLT_MAX,FLT_MAX)
+		if is_hit1:
+			is_hit2,rec2 = self.boundary.hit(r,rec1.t + 0.0001,FLT_MAX)
+			if is_hit2:
+				if rec1.t < t_min:
+					rec1.t = t_min
+				if rec2.t > t_max:
+					rec2.t = t_max
+				if rec1.t >= rec2.t:
+					return (False,return_rec)
+				if rec1.t < 0:
+					rec1.t = 0
+				distance_inside_boundary = (rec2.t - rec1.t) * r.direction.length()
+				hit_distance = -(1/self.density) * math.log(random.random())
+				if hit_distance < distance_inside_boundary:
+					return_rec.t = rec1.t + hit_distance/r.direction.length()
+					return_rec.p = r(return_rec.t)
+					return_rec.normal = vec3(1.0,0,0) #arbitrary
+					return_rec.mat = self.phase_function
+					return (True,return_rec)
+		return (False,return_rec)
 
 
 

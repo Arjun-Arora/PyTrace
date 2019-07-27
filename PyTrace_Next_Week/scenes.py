@@ -106,5 +106,29 @@ def cornell_box():
 
     return hit_object_list
 
+def cornell_smoke():
+    hit_object_list = []
+    mat_red = lambertian(constant_texture(vec3(0.65,0.05,0.05)))
+    mat_white = lambertian(constant_texture(vec3(0.73,0.73,0.73)))
+    mat_green = lambertian(constant_texture(vec3(0.12,0.45,0.15)))
+    mat_light = diffuse_light(constant_texture(vec3(7,7,7)))
+
+    hit_object_list.append(flip_normals(yz_rect(0,555,0,555,555,mat_green)))
+    hit_object_list.append(yz_rect(0,555,0,555,0,mat_red))
+    hit_object_list.append(xz_rect(113,443,127,432,554,mat_light))
+    hit_object_list.append(flip_normals(xz_rect(0,555,0,555,555,mat_white)))
+    hit_object_list.append(xz_rect(0,555,0,555,0,mat_white))
+    hit_object_list.append(flip_normals(xy_rect(0,555,0,555,555,mat_white)))
+
+    b1 = translate(rotate_y(box(vec3(0, 0, 0), vec3(165, 165, 165), mat_white),-18), vec3(130,0,65))
+    b2 = translate(rotate_y(box(vec3(0, 0, 0), vec3(165, 330, 165), mat_white),15), vec3(265,0,295))
+    medium1 = constant_medium(b1,0.01,constant_texture(vec3(1.0,1.0,1.0)))
+    medium2 = constant_medium(b2,0.01,constant_texture(vec3(0.0,0.0,0.0)))
+    hit_object_list.append(medium1)
+    hit_object_list.append(medium2)
+
+    return hit_object_list
+
+
 
 
