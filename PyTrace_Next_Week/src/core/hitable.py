@@ -6,6 +6,7 @@ from material import *
 from math import pi,sin,cos
 FLT_MAX = sys.float_info.max
 import copy 
+sys.setrecursionlimit(1500)
 
 '''
 replacement for hit_record struct 
@@ -156,13 +157,13 @@ class bvh_node(hitable):
 			self.left = bvh_node(self.object_list[:split],self.time0,self.time1)
 			self.right =bvh_node(self.object_list[split: n - split],self.time0,self.time1)
 
-		left_check,left_box = self.left.bounding_box()
-		right_check,right_box = self.right.bounding_box()
+		left_check,left_box = self.left.bounding_box(self.time0,self.time1)
+		right_check,right_box = self.right.bounding_box(self.time0,self.time1)
 		if not left_check or not right_check:
 			assert(False, "missing bounding box in bvh node construction")
 		self.box = sorrounding_box(left_box,right_box)
 		
-	def bounding_box(self):
+	def bounding_box(self,t0: float, t1: float):
 		return (True,self.box)
 	def hit(self,r:ray, t_min:float, t_max: float):
 		rec = hit_record()

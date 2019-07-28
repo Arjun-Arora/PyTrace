@@ -48,7 +48,7 @@ def main(filename: str = 'output',output_res: tuple = (200,100),num_samples= 100
     ny = output_res[1];
     num_samples = num_samples
 
-    output = np.zeros((nx,ny,3))
+    output = np.zeros((nx,ny,3)).tolist()
 
     #f.write("P3\n" +  str(nx)  +  " "  + str(ny) + "\n255\n");
 
@@ -61,8 +61,8 @@ def main(filename: str = 'output',output_res: tuple = (200,100),num_samples= 100
     #hit_object_list = earth_sphere()
     #hit_object_list = simple_light()
     #hit_object_list = cornell_box()
-    hit_object_list = cornell_smoke()
-
+    #hit_object_list = cornell_smoke()
+    hit_object_list = final_scene()
     #lookfrom = vec3(13,2,3)
     #lookat = vec3(0,0,0)
 
@@ -73,7 +73,8 @@ def main(filename: str = 'output',output_res: tuple = (200,100),num_samples= 100
     # aperture = 0.1
     #vfov = 20
 
-    lookfrom = vec3(278,278,-800)
+   #lookfrom = vec3(278,278,-800)
+    lookfrom = vec3(478,278,-600)
     lookat = vec3(278,278,0)
     dist_to_focus = 10
     aperture = 0 
@@ -90,21 +91,26 @@ def main(filename: str = 'output',output_res: tuple = (200,100),num_samples= 100
                     r = cam.get_ray(u,v)
                     #p = r(2.0)
                     col += color(r,hit_object_list,0)
-                pbar.update(1)
                 col /= float(num_samples)
-                col = vec3(math.sqrt(col[0]),math.sqrt(col[1]),math.sqrt(col[2]))
-                ir = int(255.99 * col.x0);
-                ig = int(255.99 * col.x1);
-                ib = int(255.99 * col.x2);
-                output[i,j,:] = np.array([ir,ig,ib]).clip(0,255)
+                #col = vec3(math.sqrt(col[0]),math.sqrt(col[1]),math.sqrt(col[2]))
+                ir = 255.99 * math.sqrt(col[0]);
+                ig = 255.99 * math.sqrt(col[1]);
+                ib = 255.99 * math.sqrt(col[2]);
+
+                ir = (max(0,min(ir,255)))
+                ig = (max(0,min(ig,255)))
+                ib = (max(0,min(ib,255)))
+                output[i][j] = [ir,ig,ib]
+
+                pbar.update(1)
                 #f.write(str(ir)  +  " "  +  str(ig) +  " "  + str(ib) + "\n");
 
-    plt.imsave(filename + ".png",np.rot90(output).astype(np.uint8))
+    plt.imsave(filename + ".png",np.rot90(np.array(output)).astype(np.uint8))
     #f.close()
 
 if  __name__ == "__main__":
     #cProfile.runctx('main()',None,("random_spheres",(200,100),64))
     #main("./unit_tests/random_spheres_unit_test",(200,100),64)
-    main("./test",output_res = (400,300),num_samples = 1024)
+    main("./test",output_res = (400,300),num_samples = 256)
 
 
