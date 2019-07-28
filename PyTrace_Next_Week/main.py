@@ -111,5 +111,6 @@ if  __name__ == "__main__":
     #cProfile.runctx('main()',None,("random_spheres",(200,100),64))
     #main("./unit_tests/random_spheres_unit_test",(200,100),64)
     main("./test",output_res = (800,800),num_samples = 2048)
+    #1:31:19<00:00, 116.79it/s
 
 
