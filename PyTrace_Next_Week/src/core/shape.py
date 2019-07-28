@@ -49,7 +49,7 @@ class sphere(hitable):
 		return (False,rec)
 	def bounding_box(self, t0: float=None, t1: float=None):
 		box = aabb(self.center - vec3(self.radius,self.radius,self.radius),
-				  center + vec3(self.radius,self.radius,self.radius))
+				  self.center + vec3(self.radius,self.radius,self.radius))
 		return (True,box);
 
 

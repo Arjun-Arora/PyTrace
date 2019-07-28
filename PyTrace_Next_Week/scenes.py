@@ -130,32 +130,32 @@ def cornell_smoke():
     return hit_object_list
 
 def final_scene():
-    nb = 5
+    nb = 20
     hit_object_list = []
     boxlist = []
     boxlist2 = []
 
     white = lambertian(constant_texture(vec3(0.73,0.73,0.73)))
     # bvh node test
-    # ground = lambertian(constant_texture(vec3(0.48,0.83,0.53)))
-    # for i in range(nb):
-    #     for j in range(nb): 
-    #         w = 100
-    #         x0 = -1000 + i * w
-    #         z0 = -1000 + j * w 
-    #         y0 = 0 
-    #         x1 = x0 + w
-    #         y1 = 100 * (random.random() + 0.01)
-    #         z1 = z0 + w
-    #         boxlist.append(box(vec3(x0,y0,z0),vec3(x1,y1,z1),ground))
+    ground = lambertian(constant_texture(vec3(0.48,0.83,0.53)))
+    for i in range(nb):
+        for j in range(nb): 
+            w = 100
+            x0 = -1000 + i * w
+            z0 = -1000 + j * w 
+            y0 = 0 
+            x1 = x0 + w
+            y1 = 100 * (random.random() + 0.01)
+            z1 = z0 + w
+            boxlist.append(box(vec3(x0,y0,z0),vec3(x1,y1,z1),ground))
 
-    # hit_object_list.append(bvh_node(boxlist,0,1))
-    # bvh node test end
+    hit_object_list.append(bvh_node(boxlist,0,1))
+    # # bvh node test end
 
-    # light test
+    # # light test
     light = diffuse_light(constant_texture(vec3(7,7,7)))
     hit_object_list.append(xz_rect(123,423,147,412,554,light))
-    # light test end
+    # # light test end
 
     # moving sphere test
     center = vec3(400,400,200)
@@ -191,11 +191,11 @@ def final_scene():
     # perlin noise test end
 
     # rotate and translate and bvh node test
-    # ns = 10
-    # for j in range(ns):
-    #     boxlist2.append(sphere(vec3(165 * random.random(),165 * random.random(),165 * random.random,10,white)))
-    # hit_object_list.append(translate(rotate_y(bvh_node(boxlist2,0.0,1.0),15),vec3(-100,270,395)))
-    # rotate and translate and bvh node test end 
+    ns = 1000
+    for j in range(ns):
+        boxlist2.append(sphere(vec3(165 * random.random(),165 * random.random(),165 * random.random()),10,white))
+    hit_object_list.append(translate(rotate_y(bvh_node(boxlist2,0.0,1.0),15),vec3(-100,270,395)))
+    #rotate and translate and bvh node test end 
     return hit_object_list
 
 

@@ -60,9 +60,9 @@ def main(filename: str = 'output',output_res: tuple = (200,100),num_samples= 100
     #hit_object_list = two_perlin_spheres()
     #hit_object_list = earth_sphere()
     #hit_object_list = simple_light()
-    hit_object_list = cornell_box()
+    #hit_object_list = cornell_box()
     #hit_object_list = cornell_smoke()
-    #hit_object_list = final_scene()
+    hit_object_list = final_scene()
     #lookfrom = vec3(13,2,3)
     #lookat = vec3(0,0,0)
 
@@ -72,8 +72,8 @@ def main(filename: str = 'output',output_res: tuple = (200,100),num_samples= 100
     # dist_to_focus = 10
     # aperture = 0.1
     #vfov = 20
-    lookfrom = vec3(278,278,-800)
-    #lookfrom = vec3(478,278,-600)
+    #lookfrom = vec3(278,278,-800)
+    lookfrom = vec3(478,278,-600)
     lookat = vec3(278,278,0)
     dist_to_focus = 10
     aperture = 0 
@@ -110,7 +110,9 @@ def main(filename: str = 'output',output_res: tuple = (200,100),num_samples= 100
 if  __name__ == "__main__":
     #cProfile.runctx('main()',None,("random_spheres",(200,100),64))
     #main("./unit_tests/random_spheres_unit_test",(200,100),64)
-    main("./test",output_res = (800,800),num_samples = 2048)
+    main("./test",output_res = (400,300),num_samples = 1024)
+    #main("./test",output_res = (800,800),num_samples = 2048)
+    #cornell box
     #1:31:19<00:00, 116.79it/s
 
 

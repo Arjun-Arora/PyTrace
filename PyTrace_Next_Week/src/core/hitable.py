@@ -137,6 +137,7 @@ class bvh_node(hitable):
 		self.left = None
 		self.right = None 
 		self.box = None
+		# print(len(self.object_list))
 
 		axis = int(random.random() * 3)
 		if(axis == 0):
@@ -144,8 +145,11 @@ class bvh_node(hitable):
 		elif axis == 1: 
 			sorted(self.object_list,key = box_y_val)
 		else:
-			sorted(object_list,key = box_z_val)
+			sorted(self.object_list,key = box_z_val)
+
+
 		if len(self.object_list) == 1:
+			#print('hit here')
 			self.left = self.object_list[0]
 			self.right = self.left
 		elif len(self.object_list) == 2: 
@@ -154,8 +158,15 @@ class bvh_node(hitable):
 		else: 
 			n = len(self.object_list)
 			split = int(n/2)
+			#print(split)
+			# print("went left")
 			self.left = bvh_node(self.object_list[:split],self.time0,self.time1)
-			self.right =bvh_node(self.object_list[split: n - split],self.time0,self.time1)
+			# print('went right')
+			# print("split: {}  n - split: {}".format(split,n - split) )
+			if split != n - split:
+				self.right =bvh_node(self.object_list[split: n - split],self.time0,self.time1)
+			else: 
+				self.right = bvh_node(self.object_list[split:],self.time0,self.time1)
 
 		left_check,left_box = self.left.bounding_box(self.time0,self.time1)
 		right_check,right_box = self.right.bounding_box(self.time0,self.time1)
