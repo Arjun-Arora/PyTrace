@@ -12,7 +12,7 @@ the main.py in each directory includes all configurations you need to generate a
 #### To run, simply run pypy3 main.py or python main.py
 
 dependencies include: 
-1. pypy3
+1. pypy3 (note all other dependencies must be installed within pypy3)
 2. numpy 
 3. matplotlib
 4. tqdm
