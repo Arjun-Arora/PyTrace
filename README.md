@@ -1,5 +1,7 @@
 # PyTrace
 
+![image](./PyTrace_Next_Week/references/cornell_box_rotated.png)
+
 
 A (nearly) pure Ray Tracing Project for Python
 
