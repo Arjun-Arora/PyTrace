@@ -32,7 +32,7 @@ Note: Iterations per second are how many output pixels are processed per second
 
 800 x 800
 
-Standard Implementation w/ Pypy
+Standard Implementation w/ PyPy
 
 avg: 116.79 it/s
 
@@ -76,7 +76,7 @@ Standard implementation w/PyPy
 
 avg:  4953.02 it/s 
 
-time: 00:00:03  
+time: 00:03:13  
 
 ### W/ current scene: 
 100 spp 
