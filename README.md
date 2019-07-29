@@ -11,7 +11,7 @@ The original code for each book I wrote is contained within the sub directories 
 
 main.py includes all configurations you need to generate an image. 
 
-to run, simply run pypy3 main.py or python main.py
+#### To run, simply run pypy3 main.py or python main.py
 
 dependencies include: 
 1. pypy3
