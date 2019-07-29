@@ -1,13 +1,41 @@
-Ray Tracing Project for Python
+# PyTrace
 
-Purely for educational purposes
 
-First will work through Ray Tracing on a weekend, contained here
+A (nearly) pure Ray Tracing Project for Python
 
-Then will work on my own implementation 
+This work is based off the books **Ray Tracing in One Weekend** and **Ray Tracing: the Next Week** by Peter Shirley but ported to Python 
 
+The original code for each book I wrote is contained within the sub directories **PyTrace_Weekend** and **PyTrace_Next_Week**
+
+
+dependencies include: 
+1. pypy3
+2. numpy 
+3. matplotlib
+4. tqdm
+5. noise
+
+Technically, you can run w/o pypy3 installed but it is very slow w/o the JIT compilation, as seen below 
 
 Will look to accelerate with CUDA compilation in the future
+
+
+PyTrace_Next_Week Benchmark: 
+Note: Iterations per second are how many pixels 
+ 
+W/ Cornell Box Rotated: 
+2048 spp
+800 x 800
+Standard Implementation w/ Pypy
+avg: 116.79 it/s
+time: 1:31:19
+
+W/ Final Scene: 
+2048 spp
+800 x 800
+Standard Implementaiton w/ Pypy
+avg: N/A 
+time: ~ 3 Hours
 
 PyTrace_Weekend Benchmark:
 Note: Iterations per second are how many pixels 
