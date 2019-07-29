@@ -2,6 +2,7 @@
 
 ![image](./PyTrace_Next_Week/references/cornell_box_rotated.png)
 
+![image2](./PyTrace_Next_Week/references/final_scene.png)
 
 A (nearly) pure Ray Tracing Project for Python
 
