@@ -25,7 +25,7 @@ Will look to accelerate with CUDA compilation in the future
 
 
 ## PyTrace_Next_Week Benchmark: 
-Note: Iterations per second are how many pixels 
+Note: Iterations per second are how many output pixels are processed per second 
  
 ### W/ Cornell Box Rotated: 
 2048 spp
