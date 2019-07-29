@@ -23,9 +23,9 @@ Technically, you can run w/o pypy3 installed but it is very slow w/o the JIT com
 
 ## Future Goals
 
-1. Add more features such as different sampling methods
+1. Add more features such as different sampling methods, more materials, etc
 2. Optimizations (Better BVH creation, memory and operation optimizations)
-3. Arbitrary geometry support
+3. Arbitrary geometry support (mostly polygonal meshes)
 4. Scene descriptions and parser
 5. CUDA optimizations
 
