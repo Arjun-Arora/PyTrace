@@ -132,13 +132,3 @@ avg: 1207.04it/s
 time: 00:00:06
 
 
-### W/ random scene:
-200 x 100 
-
-3 Large spheres + random spheres
-
-Standard implementation w/PyPy w/ cprofile
-
-time: 151.181 seconds
-
-
