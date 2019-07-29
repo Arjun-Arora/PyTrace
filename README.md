@@ -21,7 +21,13 @@ dependencies include:
 
 Technically, you can run w/o pypy3 installed but it is very slow w/o the JIT compilation, as seen below 
 
-Will look to accelerate with CUDA compilation in the future
+## Future Goals
+
+1. Add more features such as different sampling methods
+2. Optimizations (Better BVH creation, memory and operation optimizations)
+3. Arbitrary geometry support
+4. Scene descriptions and parser
+5. CUDA optimizations
 
 
 ## PyTrace_Next_Week Benchmark: 
