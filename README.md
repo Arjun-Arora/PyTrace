@@ -5,7 +5,7 @@
 
 A (nearly) pure Ray Tracing Project for Python
 
-This work is based off the books **Ray Tracing in One Weekend** and **Ray Tracing: the Next Week** by Peter Shirley but ported to Python 
+This work is based off the books **[Ray Tracing in One Weekend](https://github.com/RayTracing/raytracinginoneweekend)** and **[Ray Tracing: the Next Week](https://github.com/RayTracing/raytracingthenextweek)** by Peter Shirley but ported to Python 
 
 The original code for each book I wrote is contained within the sub directories **PyTrace_Weekend** and **PyTrace_Next_Week.** 
 the main.py in each directory includes all configurations you need to generate an image. 
