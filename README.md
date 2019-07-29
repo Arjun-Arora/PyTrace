@@ -76,7 +76,7 @@ Standard implementation w/PyPy
 
 avg:  4953.02 it/s 
 
-time: 00:03:13   
+time: 00:00:03  
 
 ### W/ current scene: 
 100 spp 
