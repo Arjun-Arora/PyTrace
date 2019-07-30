@@ -12,14 +12,12 @@ class sampler(ABC):
 
 class uniform_sampler(sampler):
 	def __init__(self,nx: float, ny: float, seed: float = None):
-		self.seed = seed
+		if seed is not None:
+			random.seed(seed)
 		self.nx = nx
-		self.ny = ny
+		self.ny = ny 
+
 	def generate_sample_uv(self,i: int, j: int): 
-		if self.seed is not None: 
-			random.seed(self.seed)
 		u = (i + random.random())/self.nx
-		if self.seed is not None: 
-			random.seed(self.seed)
 		v = (j + random.random())/self.ny
 		return u,v 

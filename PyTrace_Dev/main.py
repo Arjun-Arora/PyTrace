@@ -18,8 +18,6 @@ import matplotlib.pyplot as plt
 import cProfile
 MAX_FLOAT = sys.float_info.max
 
-random.seed(123)
-
 def color(r: ray, world: list,depth = 0,max_depth = 4):
     rec = hit_record()
     hit_anything,rec = hitable_list(world).hit(r,0.001,MAX_FLOAT)
@@ -79,8 +77,9 @@ def main(filename: str = 'output',output_res: tuple = (200,100),num_samples= 100
     dist_to_focus = 10
     aperture = 0 
     vfov = 40
+    seed = 123
 
-    sampler = uniform_sampler(nx,ny,None)
+    sampler = uniform_sampler(nx,ny,seed)
     cam = camera(lookfrom,lookat,vec3(0,1,0),vfov,float(nx)/float(ny),aperture,dist_to_focus,0.0,1.0)
     with tqdm(total = ny * nx) as pbar:
         for j in range(ny-1 ,-1,-1):
