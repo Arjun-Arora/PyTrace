@@ -11,8 +11,6 @@ class camera:
 	def __init__(self,lookfrom: vec3,lookat: vec3, vup: vec3,
 					  vfov: float,aspect: float, aperture: float, focus_dist: float,t0: float,t1: float):
 
-		
-
 		self.time0 = t0
 		self.time1 = t1
 		self.lens_radius = aperture / 2
