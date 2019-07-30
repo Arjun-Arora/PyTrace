@@ -116,6 +116,6 @@ if  __name__ == "__main__":
     #main("./test",output_res = (400,300),num_samples = 1024)
     #main("./test",output_res = (800,800),num_samples = 2048)
     main("./test",output_res = (256,192),num_samples = 256)
-    # 00:00:43 1118.0 it/s 
+    # 00:00:43 1118.0 it/s
 
 
