@@ -9,7 +9,7 @@ This work is based off the books **[Ray Tracing in One Weekend](https://github.c
 The original code for each book I wrote is contained within the sub directories **PyTrace_Weekend** and **PyTrace_Next_Week.** 
 the main.py in each directory includes all configurations you need to generate an image. 
 
-Active Development will be done in the **PyTrace_Dev** directory
+Active Development will be done in the **PyTrace_Dev** directory.
 
 #### To run, simply run pypy3 main.py or python main.py
 
