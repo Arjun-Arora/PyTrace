@@ -11,6 +11,10 @@ class sampler(ABC):
 	def generate_sample_uv(self,i: int, j: int):
 		return (0.0,0.0);
 
+def is_square(integer):
+	root = math.sqrt(integer)
+	return integer == int(root + 0.5) ** 2
+
 '''
 uniform sampler
 
@@ -44,6 +48,22 @@ N is square of the number of stratified samples per x,y dimension
 '''
 class stratified_sampler(sampler):
 	def __init__(self,nx: float, ny: float,N: int, seed: float = None): 
-		sqrt_N = int(math.sqrt(N))
-		self.s = self.t = sqrt_N
+		assert is_square(N),"For stratified sampler,N must be a square number"
+		self.sqrt_N = int(math.sqrt(N))
+		self.nx = nx
+		self.ny = ny
+	def generate_sample_uv(self, i: int, j: int,s: int,t: int):
+		u = (s + random.random())/(self.sqrt_N)
+		v = (t + random.random())/(self.sqrt_N)
+		u = (i + u)/self.nx
+		v = (j + v)/self.ny
+		return u,v
+	def generate_n_samples_uv(self,i: int, j: int,num_samples: int):
+		samples = []
+		for s in range(self.sqrt_N):
+			for t in range(self.sqrt_N):
+				samples.append(self.generate_sample_uv(i,j,s,t))
+		return samples
+
+
 

@@ -79,7 +79,8 @@ def main(filename: str = 'output',output_res: tuple = (200,100),num_samples= 100
     vfov = 40
     seed = 123
 
-    sampler = uniform_sampler(nx,ny,seed)
+    #sampler = uniform_sampler(nx,ny,seed)
+    sampler = stratified_sampler(nx,ny,num_samples)
     cam = camera(lookfrom,lookat,vec3(0,1,0),vfov,float(nx)/float(ny),aperture,dist_to_focus,0.0,1.0)
     with tqdm(total = ny * nx) as pbar:
         for j in range(ny-1 ,-1,-1):
@@ -88,6 +89,7 @@ def main(filename: str = 'output',output_res: tuple = (200,100),num_samples= 100
                 samples = sampler.generate_n_samples_uv(i,j,num_samples)
                 for s in samples: 
                     u,v = s
+                    #print(" i: {} u:{} j: {}, v: {} ".format(i,u,j,v))
                     r = cam.get_ray(u,v)
                     col += color(r,hit_object_list,0)
                 col /= float(num_samples)
