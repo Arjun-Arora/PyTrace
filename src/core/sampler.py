@@ -23,7 +23,7 @@ ny: num y pixels
 seed: random seed value
 
 '''
-class uniform_sampler(sampler):
+class uniform_sampler_2D(sampler):
 	def __init__(self, seed: float = None):
 		if seed is not None:
 			random.seed(seed)
