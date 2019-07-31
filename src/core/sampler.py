@@ -44,7 +44,7 @@ stratified sampler
 
 N is square of the number of stratified samples per x,y dimension
 '''
-class stratified_sampler(sampler):
+class stratified_sampler_2D(sampler):
 	def __init__(self,N: int, seed: float = None): 
 		assert is_square(N),"For stratified sampler,N must be a square number"
 		if seed is not None:
