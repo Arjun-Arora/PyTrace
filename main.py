@@ -80,7 +80,7 @@ def main(filename: str = 'output',output_res: tuple = (200,100),num_samples= 100
     seed = 123
 
     #sampler = uniform_sampler(seed)
-    sampler = stratified_sampler(num_samples)
+    sampler = stratified_sampler(num_samples,seed)
     cam = camera(lookfrom,lookat,vec3(0,1,0),vfov,float(nx)/float(ny),aperture,dist_to_focus,0.0,1.0)
     with tqdm(total = ny * nx) as pbar:
         for j in range(ny-1 ,-1,-1):

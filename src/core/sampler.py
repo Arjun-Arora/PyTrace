@@ -47,6 +47,8 @@ N is square of the number of stratified samples per x,y dimension
 class stratified_sampler(sampler):
 	def __init__(self,N: int, seed: float = None): 
 		assert is_square(N),"For stratified sampler,N must be a square number"
+		if seed is not None:
+			random.seed(seed)
 		self.sqrt_N = int(math.sqrt(N))
 	def generate_sample_uv(self,s: int,t: int):
 		u = (s + random.random())/(self.sqrt_N)
