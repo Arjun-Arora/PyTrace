@@ -79,14 +79,14 @@ def main(filename: str = 'output',output_res: tuple = (200,100),num_samples= 100
     vfov = 40
     seed = 123
 
-    sampler = uniform_sampler_2D(seed)
+    #sampler = uniform_sampler_2D(seed)
     #sampler = stratified_sampler_2D(num_samples,seed)
     cam = camera(lookfrom,lookat,vec3(0,1,0),vfov,float(nx)/float(ny),aperture,dist_to_focus,0.0,1.0)
     with tqdm(total = ny * nx) as pbar:
         for j in range(ny-1 ,-1,-1):
             for i in range(0,nx):
                 col = vec3(0,0,0)
-                samples = sampler.generate_n_samples_uv(i,j,num_samples)
+                samples = sampler.generate_n_samples_uv(num_samples)
                 for s in samples: 
                     u,v = s
                     #print(" i: {} u:{} j: {}, v: {} ".format(i,u,j,v))

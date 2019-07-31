@@ -31,7 +31,7 @@ class uniform_sampler_2D(sampler):
 		u = (random.random())
 		v = (random.random())
 		return u,v 
-	def generate_n_samples_uv(self,i: int, j: int,num_samples: int):
+	def generate_n_samples_uv(self,num_samples: int):
 		samples = []
 		for k in range(num_samples):
 			samples.append(self.generate_sample_uv())
@@ -54,7 +54,7 @@ class stratified_sampler_2D(sampler):
 		u = (s + random.random())/(self.sqrt_N)
 		v = (t + random.random())/(self.sqrt_N)
 		return u,v
-	def generate_n_samples_uv(self,i: int, j: int,num_samples: int):
+	def generate_n_samples_uv(self,num_samples: int):
 		samples = []
 		for s in range(self.sqrt_N):
 			for t in range(self.sqrt_N):
