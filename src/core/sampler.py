@@ -24,19 +24,17 @@ seed: random seed value
 
 '''
 class uniform_sampler(sampler):
-	def __init__(self,nx: float, ny: float, seed: float = None):
+	def __init__(self, seed: float = None):
 		if seed is not None:
 			random.seed(seed)
-		self.nx = nx
-		self.ny = ny 
-	def generate_sample_uv(self,i: int, j: int): 
-		u = (i + random.random())/self.nx
-		v = (j + random.random())/self.ny
+	def generate_sample_uv(self): 
+		u = (random.random())
+		v = (random.random())
 		return u,v 
 	def generate_n_samples_uv(self,i: int, j: int,num_samples: int):
 		samples = []
 		for k in range(num_samples):
-			samples.append(self.generate_sample_uv(i,j))
+			samples.append(self.generate_sample_uv())
 		return samples
 
 
@@ -47,22 +45,18 @@ stratified sampler
 N is square of the number of stratified samples per x,y dimension
 '''
 class stratified_sampler(sampler):
-	def __init__(self,nx: float, ny: float,N: int, seed: float = None): 
+	def __init__(self,N: int, seed: float = None): 
 		assert is_square(N),"For stratified sampler,N must be a square number"
 		self.sqrt_N = int(math.sqrt(N))
-		self.nx = nx
-		self.ny = ny
-	def generate_sample_uv(self, i: int, j: int,s: int,t: int):
+	def generate_sample_uv(self,s: int,t: int):
 		u = (s + random.random())/(self.sqrt_N)
 		v = (t + random.random())/(self.sqrt_N)
-		u = (i + u)/self.nx
-		v = (j + v)/self.ny
 		return u,v
 	def generate_n_samples_uv(self,i: int, j: int,num_samples: int):
 		samples = []
 		for s in range(self.sqrt_N):
 			for t in range(self.sqrt_N):
-				samples.append(self.generate_sample_uv(i,j,s,t))
+				samples.append(self.generate_sample_uv(s,t))
 		return samples
 
 

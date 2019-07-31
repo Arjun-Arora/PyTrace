@@ -29,6 +29,6 @@ class camera:
 		self.vertical = 2 * self.half_height * self.focus_dist * self.v
 	def get_ray(self,s: float,t: float):
 		rd = self.lens_radius * random_in_unit_disk()
-		offset = self.u * rd.x() + self.v * rd.y()
+		offset = self.u * rd[0] + self.v * rd[1]
 		time = self.time0 + random.random() * (self.time1-self.time0)
 		return ray(self.origin + offset,self.lower_left_corner + s * self.horizontal + t * self.vertical - self.origin - offset,time)
