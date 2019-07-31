@@ -85,12 +85,10 @@ def main(filename: str = 'output',output_res: tuple = (200,100),num_samples= 100
         for j in range(ny-1 ,-1,-1):
             for i in range(0,nx):
                 col = vec3(0,0,0)
-                for s in range(0,num_samples):
-                    # u = float(i + random.random())/float(nx)
-                    # v = float(j + random.random())/float(ny)
-                    u,v = sampler.generate_sample_uv(i,j)
+                samples = sampler.generate_n_samples_uv(i,j,num_samples)
+                for s in samples: 
+                    u,v = s
                     r = cam.get_ray(u,v)
-                    #p = r(2.0)
                     col += color(r,hit_object_list,0)
                 col /= float(num_samples)
                 #col = vec3(math.sqrt(col[0]),math.sqrt(col[1]),math.sqrt(col[2]))
