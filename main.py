@@ -59,9 +59,10 @@ def main(filename: str = 'output',output_res: tuple = (200,100),num_samples= 100
     #hit_object_list = two_perlin_spheres()
     #hit_object_list = earth_sphere()
     #hit_object_list = simple_light()
-    hit_object_list = cornell_box()
+    #hit_object_list = cornell_box()
     #hit_object_list = cornell_smoke()
     #hit_object_list = final_scene()
+    hit_object_list = cornell_triangle()
     #lookfrom = vec3(13,2,3)
     #lookat = vec3(0,0,0)
 

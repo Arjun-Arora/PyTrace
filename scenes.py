@@ -129,6 +129,26 @@ def cornell_smoke():
 
     return hit_object_list
 
+def cornell_triangle():
+    hit_object_list = []
+    mat_red = lambertian(constant_texture(vec3(0.65,0.05,0.05)))
+    mat_white = lambertian(constant_texture(vec3(0.73,0.73,0.73)))
+    mat_green = lambertian(constant_texture(vec3(0.12,0.45,0.15)))
+    mat_light = diffuse_light(constant_texture(vec3(7,7,7)))
+
+    hit_object_list.append(flip_normals(yz_rect(0,555,0,555,555,mat_green)))
+    hit_object_list.append(yz_rect(0,555,0,555,0,mat_red))
+    hit_object_list.append(xz_rect(113,443,127,432,554,mat_light))
+    hit_object_list.append(flip_normals(xz_rect(0,555,0,555,555,mat_white)))
+    hit_object_list.append(xz_rect(0,555,0,555,0,mat_white))
+    hit_object_list.append(flip_normals(xy_rect(0,555,0,555,555,mat_white)))
+
+    hit_object_list.append(triangle(vec3(250,250,250),vec3(165,330,165),vec3(350,250,250),mat_green))
+    #hit_object_list.append(flip_normals(triangle(vec3(0,0,100),vec3(165,330,165),vec3(400,0,0),mat_green)))
+
+
+    return hit_object_list
+
 def final_scene():
     nb = 20
     hit_object_list = []
