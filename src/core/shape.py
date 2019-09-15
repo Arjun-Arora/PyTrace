@@ -295,8 +295,18 @@ class triangle(hitable):
         #print("{} {}".format(rec.u,rec.v))
 
         return (True,rec)
-    def bounding_box(self,t0: float, t1: float ): 
-        pass 
+    def bounding_box(self,t0: float, t1: float ):
+        min_x = min([self.v0[0],self.v1[0],self.v2[0]])
+        max_x = max([self.v0[0],self.v1[0],self.v2[0]])
+
+        min_y = min([self.v0[1],self.v1[1],self.v2[1]])
+        max_y = max([self.v0[1],self.v1[1],self.v2[1]])
+
+        min_z = min([self.v0[2],self.v0[2],self.v2[2]])
+        max_z = max([self.v0[2],self.v0[2],self.v2[2]])
+
+        box = aabb(vec3(min_x,min_y,min_z),vec3(max_x,max_y,max_z)) 
+        return (True,box)
 
 
 
