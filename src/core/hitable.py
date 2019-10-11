@@ -68,7 +68,7 @@ def sorrounding_box(box0: aabb, box1: aabb):
 
 '''
 substitute function for hitable_list 
-since list in python can already deal with abritrary classes and we dont need to specify a
+since list in python can already deal with abritrary objects and we dont need to specify a
 special class to store lists and the hit functionality.
 
 Here we just iterate through a list of hitable objects and record the closest hit for any ray
@@ -140,13 +140,12 @@ class bvh_node(hitable):
 		# print(len(self.object_list))
 
 		axis = int(random.random() * 3)
-		if(axis == 0):
+		if axis == 0:
 			sorted(self.object_list,key = box_x_val)
 		elif axis == 1: 
 			sorted(self.object_list,key = box_y_val)
-		else:
+		elif axis == 2: 
 			sorted(self.object_list,key = box_z_val)
-
 
 		if len(self.object_list) == 1:
 			#print('hit here')
